@@ -45,7 +45,6 @@ tasks.named('test') {
 }
 
 
-
 def querydslDir = "$buildDir/generated/querydsl" // (3)
 
 querydsl { // (4)
