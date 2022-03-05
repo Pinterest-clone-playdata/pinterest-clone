@@ -36,8 +36,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
-
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-core:${queryDslVersion}"
 }
 
 tasks.named('test') {
