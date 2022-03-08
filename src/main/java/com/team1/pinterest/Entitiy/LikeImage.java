@@ -23,12 +23,12 @@ public class LikeImage {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "IMAGE_ID")
-    private Image image;
+    private Pin pin;
 
     // == 생성 메서드 ==//
-    public LikeImage(User user, Image image) {
+    public LikeImage(User user, Pin pin) {
         this.user = user;
-        this.image = image;
+        this.pin = pin;
     }
 //
 //    //== 편의 메서드 ==//

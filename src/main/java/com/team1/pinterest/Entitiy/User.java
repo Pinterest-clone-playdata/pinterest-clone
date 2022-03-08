@@ -30,13 +30,23 @@ public class User extends BasicTime {
     @Column(length = 20)
     private String password;
 
+    @Column
+    private String path;
+
     @OneToMany(mappedBy = "user")
-    private List<Image> images = new ArrayList<>();
+    private List<Pin> pins = new ArrayList<>();
 
     //== 생성 메서드 ==//
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public User(String username, String email, String password, String path) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.path = path;
     }
 }

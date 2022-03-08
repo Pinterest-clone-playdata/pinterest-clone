@@ -16,7 +16,7 @@ import static javax.persistence.GenerationType.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Image extends BasicTimeWithCreatedBy {
+public class Pin extends BasicTimeWithCreatedBy {
 
     @Id @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -35,11 +35,11 @@ public class Image extends BasicTimeWithCreatedBy {
     private User user;
     private int Count;
 
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pin", cascade = CascadeType.ALL)
     Set<LikeImage> likes = new HashSet<>();
 
     // == 생성 메서드 == //
-    public Image(String title, String content, Category category, User user) {
+    public Pin(String title, String content, Category category, User user) {
         this.title = title;
         this.content = content;
         this.category = category;

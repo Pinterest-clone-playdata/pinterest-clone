@@ -1,10 +1,10 @@
 package com.team1.pinterest.Service;
 
-import com.team1.pinterest.Entitiy.Image;
 import com.team1.pinterest.Entitiy.LikeImage;
+import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.User;
-import com.team1.pinterest.Repository.ImageRepository;
 import com.team1.pinterest.Repository.LikeRepository;
+import com.team1.pinterest.Repository.PinRepository;
 import com.team1.pinterest.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,16 +18,16 @@ import java.util.Optional;
 public class LikeService {
 
     private final LikeRepository likeRepository;
-    private final ImageRepository imageRepository;
+    private final PinRepository pinRepository;
     private final UserRepository userRepository;
 
     public boolean addLike(Long userId, Long imageId){
         User user = userRepository.findById(userId).orElseThrow();
-        Image image = imageRepository.findById(imageId).orElseThrow();
+        Pin pin = pinRepository.findById(imageId).orElseThrow();
 
-        if (isNotAlreadyLike(user, image)){
-            likeRepository.save(new LikeImage(user,image));
-            image.plusCount();
+        if (isNotAlreadyLike(user, pin)){
+            likeRepository.save(new LikeImage(user,pin));
+            pin.plusCount();
             return true;
         }
 
@@ -36,19 +36,19 @@ public class LikeService {
 
     public boolean removeLike(Long userId, Long imageId){
         User user = userRepository.findById(userId).orElseThrow();
-        Image image = imageRepository.findById(imageId).orElseThrow();
-        Optional<LikeImage> search = likeRepository.findByUserAndImage(user, image);
+        Pin pin = pinRepository.findById(imageId).orElseThrow();
+        Optional<LikeImage> search = likeRepository.findByUserAndPin(user, pin);
 
         if (search.isPresent()){
             likeRepository.delete(search.orElseThrow());
-            image.minusCount();
+            pin.minusCount();
             return true;
         }
 
         return false;
     }
 
-    private boolean isNotAlreadyLike(User user, Image image) {
-        return likeRepository.findByUserAndImage(user,image).isEmpty();
+    private boolean isNotAlreadyLike(User user, Pin pin) {
+        return likeRepository.findByUserAndPin(user,pin).isEmpty();
     }
 }
