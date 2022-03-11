@@ -5,6 +5,8 @@ import com.team1.pinterest.DTO.PinForm;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.Role;
 import com.team1.pinterest.Entitiy.User;
+import com.team1.pinterest.Exception.CustomException;
+import com.team1.pinterest.Exception.ErrorCode;
 import com.team1.pinterest.Repository.PinRepository;
 import com.team1.pinterest.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.team1.pinterest.Exception.ErrorCode.*;
 
 @Service
 @Slf4j
@@ -33,8 +37,8 @@ public class PinService {
                              MultipartFile multipartFile) throws IOException {
 
         User user = findById(pinForm.getUserId());
-        String fileName = fileProcessService.uploadImage(multipartFile);
 
+        String fileName = fileProcessService.uploadImage(multipartFile);
         Pin pin = pinRepository.save(new Pin(pinForm.getTitle(),
                 pinForm.getContent(),
                 pinForm.getRole(),
@@ -43,6 +47,7 @@ public class PinService {
 
         return PinToDTO(pin);
     }
+
 
     public void updatePin(Pin pin){
 

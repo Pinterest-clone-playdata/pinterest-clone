@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import static com.team1.pinterest.Exception.ErrorCode.*;
@@ -21,5 +22,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ErrorResponse.toResponseEntity(DUPLICATE_RESOURCE);
     }
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    protected ResponseEntity<ErrorResponse> handleMaxSizeException() {
+        log.error("handleDataException throw Exception : {}", OVER_FILESIZE);
+        return ErrorResponse.toResponseEntity(OVER_FILESIZE);
+    }
 
 }

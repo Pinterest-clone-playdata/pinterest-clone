@@ -26,7 +26,9 @@ public enum ErrorCode {
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),
-    
+
+    /* 429 Internal Server Error */
+    OVER_FILESIZE(TOO_MANY_REQUESTS, "데이터가 너무 크거나 많습니다.")
     ;
 
 

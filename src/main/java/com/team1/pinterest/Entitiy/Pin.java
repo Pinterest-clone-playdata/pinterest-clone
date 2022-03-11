@@ -26,7 +26,7 @@ public class Pin extends BasicTime {
     @Column()
     private String path;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 50, nullable = false, unique = true)
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
