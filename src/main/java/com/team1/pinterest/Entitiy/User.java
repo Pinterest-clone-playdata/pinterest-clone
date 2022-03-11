@@ -24,7 +24,7 @@ public class User extends BasicTime {
     @Column(length = 30)
     private String username;
 
-    @Column(length = 50)
+    @Column(length = 255)
     private String email;
 
     @Column(length = 20)

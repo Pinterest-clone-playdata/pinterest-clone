@@ -37,5 +37,4 @@ public class TestAPI {
         processService.uploadImage(multipartFile);
         return ResponseEntity.ok().body("ok");
     }
-
 }
