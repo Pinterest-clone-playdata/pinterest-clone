@@ -1,7 +1,7 @@
 package com.team1.pinterest.Service;
 
-import com.team1.pinterest.Entitiy.Category;
-import com.team1.pinterest.Entitiy.Image;
+import com.team1.pinterest.Entitiy.Pin;
+import com.team1.pinterest.Entitiy.Role;
 import com.team1.pinterest.Entitiy.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class LikeServiceTest {
         User user2 = new User("user2", "email2", "password2");
         em.persist(user1);
         em.persist(user2);
-        Image image1 = new Image("TITLE1", "content", Category.A, user1);
+        Pin image1 = new Pin("TITLE1", "content", Role.PUBLIC, user1);
         em.persist(image1);
 
         likeService.addLike(user2.getId(), image1.getId());
@@ -43,7 +43,7 @@ class LikeServiceTest {
         User user2 = new User("user2", "email2", "password2");
         em.persist(user1);
         em.persist(user2);
-        Image image1 = new Image("TITLE1", "content", Category.A, user1);
+        Pin image1 = new Pin("TITLE1", "content", Role.PUBLIC, user1);
         em.persist(image1);
 
         likeService.addLike(user2.getId(), image1.getId());

@@ -23,7 +23,7 @@ public class Pin extends BasicTime {
     @Column(columnDefinition = "int")
     private Long id;
 
-    @Column()
+    @Column(nullable = false)
     private String path;
 
     @Column(length = 50, nullable = false, unique = true)

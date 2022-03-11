@@ -44,10 +44,10 @@ public class InitDB {
             em.persist(user2);
             em.persist(user3);
             em.persist(user4);
-            Pin image1 = new Pin("TITLE1", "content", Role.PRIVATE, user1);
-            em.persist(image1);
+//            Pin image1 = new Pin("TITLE1", "content", Role.PRIVATE, user1);
+//            em.persist(image1);
 
-            likeService.addLike(user2.getId(), image1.getId());
+//            likeService.addLike(user2.getId(), image1.getId());
             followerService.save(user1.getId(),user2.getId());
             followerService.save(user2.getId(),user4.getId());
         }
