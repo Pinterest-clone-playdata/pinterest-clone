@@ -60,4 +60,17 @@ public class PinAPI {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @DeleteMapping("pin/{pinId}")
+    public ResponseEntity<?> deletePin(@PathVariable("pinId") Long pinId){
+        try {
+            Long tempUserId = 1L;
+            pinService.deletePin(pinId,tempUserId);
+            ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("delete complete").build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e){
+            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 }
