@@ -1,10 +1,7 @@
 package com.team1.pinterest.DTO;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.team1.pinterest.Config.AmazonS3Component;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.Role;
-import com.team1.pinterest.Entitiy.User;
 import lombok.*;
 
 @Getter @Setter
