@@ -44,6 +44,7 @@ dependencies {
 
 	testImplementation 'io.findify:s3mock_2.12:0.2.6'
 
+	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6")
 }
 
 tasks.named('test') {
