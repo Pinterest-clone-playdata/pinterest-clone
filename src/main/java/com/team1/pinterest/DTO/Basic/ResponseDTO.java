@@ -12,7 +12,7 @@ import static lombok.AccessLevel.*;
 @AllArgsConstructor
 public class ResponseDTO<T> {
 
-    private String etc;
-    private int statusCode;
+    private String message;
+    private int status;
     private List<T> data;
 }

@@ -47,6 +47,12 @@ public class Pin extends BasicTime {
     Set<LikeImage> likes = new HashSet<>();
 
     // == 생성 메서드 == //
+    public Pin(String title, String content, Role role) {
+        this.title = title;
+        this.content = content;
+        this.role = role;
+    }
+
     public Pin(String title, String content, Role role, User user) {
         this.title = title;
         this.content = content;
@@ -69,5 +75,21 @@ public class Pin extends BasicTime {
 
     public void minusCount(){
         Count --;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void changeContent(String content){
+        this.content = content;
+    }
+
+    public void changeTitle(String title){
+        this.title = title;
+    }
+
+    public void changeRole(Role role){
+        this.role = role;
     }
 }
