@@ -77,6 +77,19 @@ public class CommentService {
     }
     //Delete -> deleteComment(userId,pinId,commentId) -> validation -> delete (일단 DB delete)
 
+    public void deleteComment(Long userId, Long CommentId){
+
+        User user = findById(userId);
+        Comment comment = findByCommentId(CommentId);
+
+        if(comment.getUser() != user){
+            throw new IllegalArgumentException("작성자만 Comment를 삭제할 수 있습니다.");
+        }
+        commentRepository.delete(comment);
+        //Pin이 삭제 됬을 때 코멘트들은 어떻게 처리 될 것인가? -> PinService에서 처리? or 복구 될 수 도 있으니 두기?
+    }
+
+
     //OAuth가 validation 할 것 -> Mock or 최후 장벽
 
     // 편의 메서드

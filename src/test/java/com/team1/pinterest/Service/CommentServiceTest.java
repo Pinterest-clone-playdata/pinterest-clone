@@ -1,6 +1,8 @@
 package com.team1.pinterest.Service;
 
 import com.team1.pinterest.DTO.CommentDTO;
+import com.team1.pinterest.DTO.PinDTO;
+import com.team1.pinterest.DTO.PinForm;
 import com.team1.pinterest.Entitiy.Comment;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.Role;
@@ -12,11 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -129,4 +133,44 @@ class CommentServiceTest {
         Assertions.assertThat(comment1.get(0).getContent()).isEqualTo(result.get(0).getContent());
     }
 
+    @Test
+    //@Rollback(value = false)
+    void deleteComment() throws IOException {
+        User user1 = new User("홍길동","111@gmail.com","111");
+        em.persist(user1);
+
+        Pin pin1 = new Pin("스타트렉","대머리 아조씨", Role.PUBLIC,user1,"/asdad/asdkalsd.jpg");
+        em.persist(pin1);
+        User user2 = new User("고길동","111@gmail.com","111");
+        em.persist(user2);
+
+        List<CommentDTO> serviceComment1 = commentService.createComment(user2.getId(), pin1.getId(), "자라나라 머리머리1");
+
+        //
+        //commentService.deleteComment(user1.getId(),serviceComment1.get(0).getId());
+        // 삭제 OK
+        // 다른 유저 삭제 못하는 것 확인
+
+        //pin 삭제 했을 때 조회 -> 데이터 베이스는 어떻게 처리?
+
+        MockMultipartFile OverSizeImage = new MockMultipartFile("image",
+                "test2.jpg",
+                "image/jpg",
+
+                new FileInputStream("/Users/namjh/JavaProjects/TeamProject/test/pinterest-clone/src/test/resources/testImage.jpeg"));
+
+        //Pin pin  = new Pin("TITLE","content",Role.PUBLIC);
+        PinForm pinForm = new PinForm("TITLE1", "content", Role.PUBLIC);
+        List<PinDTO> pin = pinService.createPin(pinForm,user1.getId(),OverSizeImage);
+
+        // 추후 테스트 예정
+
+
+
+
+        //List<CommentDTO> commentDTOS = commentService.readById(serviceComment1.get(0).getId());
+
+
+
+    }
 }
