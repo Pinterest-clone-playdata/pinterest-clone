@@ -91,14 +91,14 @@ public class PinAPI {
         }
     }
 
-    @GetMapping("pin/Home")
+    @GetMapping("pin/home")
     public ResponseEntity<?> getAllAtHome(@PageableDefault(size = 15) Pageable pageable,
                                           PinSearchCondition condition){
         Slice<PinDTO> pinsAtHome = pinService.getPinsAtHome(pageable, condition);
         return ResponseEntity.ok().body(pinsAtHome);
     }
 
-    @GetMapping("pin/Follower")
+    @GetMapping("pin/follower")
     public ResponseEntity<?> getFollower(@PageableDefault(size = 15) Pageable pageable){
 
         Long tempUserId = 1L;
