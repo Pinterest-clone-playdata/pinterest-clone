@@ -40,12 +40,12 @@ public class PinService {
                 pinForm.getContent(),
                 pinForm.getRole(),
                 user,
-                awsS3Service.getFileUrl(fileName)));
+                fileName));
 
         return PinToDTO(pin);
     }
 
-    public List<PinDTO> updatePin(final Pin pin, Long userId, Long pinId){
+    public List<PinDTO> updatePin(Pin pin, Long userId, Long pinId){
         User user = findById(userId);
         pin.setUser(user);
 
@@ -62,8 +62,16 @@ public class PinService {
         return PinToDTO(originalPin);
     }
 
-    public boolean deletePin(){
-        return false;
+    public void deletePin(Long userId, Long pinId){
+        User user = findById(userId);
+        Pin pin = findByPinId(pinId);
+
+        if (pin.getUser() != user){
+            throw new IllegalArgumentException("작성자만 Pin을 삭제할 수 있습니다.");
+        }
+
+        awsS3Service.deleteFile(pin.getPath());
+        pinRepository.delete(pin);
     }
 
 
@@ -92,6 +100,7 @@ public class PinService {
         List<PinDTO> list = new ArrayList<>();
         for (Pin attribute : List.of(pin)) {
             PinDTO pinDTO = new PinDTO(attribute);
+            pinDTO.setPath(awsS3Service.getFileUrl(pinDTO.getPath()));
             list.add(pinDTO);
         }
         return list;
