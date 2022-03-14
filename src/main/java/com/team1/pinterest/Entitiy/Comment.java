@@ -38,4 +38,12 @@ public class Comment extends BasicTime {
         this.pin = pin;
         this.content = content;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
 }
