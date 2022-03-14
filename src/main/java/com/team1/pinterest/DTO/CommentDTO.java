@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+//@Data
 @Getter @Setter
 public class CommentDTO {
 

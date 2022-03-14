@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +74,7 @@ class CommentRepositoryTest {
     }
 
     @Test
+    @Rollback(value = false)
     public void findByPin(){
         User user1 = new User("홍길동","111@naver.com","123123" );
         User user2 = new User("유관순","112@naver.com","123123" );
@@ -83,8 +85,8 @@ class CommentRepositoryTest {
         em.persist(pin1);
         Comment comment1 = new Comment(user1,pin1,"test");
         Comment comment2 = new Comment(user2,pin1,"test2");
-        em.persist(comment1);
-        em.persist(comment2);
+        //em.persist(comment1);
+        //em.persist(comment2);
         Comment save1 = commentRepository.save(comment1);
         Comment save2 = commentRepository.save(comment2);
         List<Comment> byPin = commentRepository.findByPin(pin1);
