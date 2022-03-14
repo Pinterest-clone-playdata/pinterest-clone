@@ -1,18 +1,13 @@
 package com.team1.pinterest.Repository;
 
-import com.querydsl.core.QueryFactory;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team1.pinterest.DTO.FollowerDTO;
 import com.team1.pinterest.DTO.FollowerSearchCondition;
 import com.team1.pinterest.DTO.QFollowerDTO;
-import com.team1.pinterest.Entitiy.QFollower;
-import com.team1.pinterest.Entitiy.QUser;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 
