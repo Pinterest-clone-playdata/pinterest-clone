@@ -16,8 +16,7 @@ public class CommentDTO {
     private Long pinId;
     private String content;
 
-    public CommentDTO() {
-    }
+
 
     public CommentDTO(Comment comment){
         id = comment.getId();
