@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.util.StringUtils.*;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -45,7 +47,19 @@ public class CommentService {
     //Read -> findByPinId(Long pinId) or Pin ?? -> List<Comment> findByPin(Pin pin);
 
     //Update -> updateComment(userId,pinId,commentId) original comment -> validation -> update -> commentToDTO
+    public List<CommentDTO> updateComment(Comment comment, Long userId, Long pinId, Long commentId){
+        //comment user setter 필요할까?
+        User user = findById(userId);
+        comment.setUser(user);
+        validation(comment);
+        Comment originalcomment = findByCommentId(commentId);
+        if(originalcomment.getUser() != comment.getUser()){
+            throw new IllegalArgumentException("작성자만 comment를 수정할 수 있습니다.");
+        }
+        if (hasText(comment.getContent())) originalcomment.changeContent(comment.getContent());
 
+        return CommentToDTO(originalcomment);
+    }
     //Delete -> deleteComment(userId,pinId,commentId) -> validation -> delete (일단 DB delete)
 
     //OAuth가 validation 할 것 -> Mock or 최후 장벽

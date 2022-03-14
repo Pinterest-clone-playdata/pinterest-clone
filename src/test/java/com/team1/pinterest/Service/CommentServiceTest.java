@@ -1,9 +1,11 @@
 package com.team1.pinterest.Service;
 
 import com.team1.pinterest.DTO.CommentDTO;
+import com.team1.pinterest.Entitiy.Comment;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.Role;
 import com.team1.pinterest.Entitiy.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -48,5 +50,34 @@ class CommentServiceTest {
 
         List<CommentDTO> serviceComment = commentService.createComment(user2.getId(), pin1.getId(), "자라나라 머리머리");
         // 데이터 베이스에 정상적으로 저장 확인 함!
+    }
+
+    @Test
+    @Rollback(value = false)
+    void updateComment() throws IOException {
+
+        User user1 = new User("홍길동","111@gmail.com","111");
+        em.persist(user1);
+
+        Pin pin1 = new Pin("스타트렉","대머리 아조씨", Role.PUBLIC,user1,"/asdad/asdkalsd.jpg");
+        em.persist(pin1);
+        User user2 = new User("고길동","111@gmail.com","111");
+        em.persist(user2);
+
+        List<CommentDTO> serviceComment = commentService.createComment(user2.getId(), pin1.getId(), "자라나라 머리머리");
+
+        Comment changedComment = new Comment(user2,pin1,"모발 뿜뿜");
+        Comment changedComment2 = new Comment(user2,pin1,"머머리머머리");
+
+        List<CommentDTO> commentDTOS = commentService.updateComment(changedComment, user2.getId(), pin1.getId(), serviceComment.get(0).getId());
+
+        // 다른 유저가 접근
+
+        //List<CommentDTO> commentDTOS2 = commentService.updateComment(changedComment2, user1.getId(), pin1.getId(), serviceComment.get(0).getId());
+        // 에러 정상 작동 ! java.lang.IllegalArgumentException: 작성자만 comment를 수정할 수 있습니다.
+        // Assertions 사용...ㅠ
+
+
+
     }
 }

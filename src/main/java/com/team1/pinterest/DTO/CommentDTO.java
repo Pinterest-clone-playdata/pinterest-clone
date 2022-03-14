@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter @Setter
 public class CommentDTO {
 
+    private Long id;
     private Long userId;
     private Long pinId;
     private String content;
@@ -18,7 +19,7 @@ public class CommentDTO {
 
 
     public CommentDTO(Comment comment){
-
+        id = comment.getId();
         userId = comment.getUser().getId();
         pinId = comment.getPin().getId();
         content = comment.getContent();
