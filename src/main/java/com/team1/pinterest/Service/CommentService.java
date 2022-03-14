@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.util.StringUtils.*;
 
@@ -41,10 +42,24 @@ public class CommentService {
         validation(comment);
         Comment savedComment = commentRepository.save(comment);
 
-        return CommentToDTO(savedComment);
+        return commentToDTO(savedComment);
 
     }
     //Read -> findByPinId(Long pinId) or Pin ?? -> List<Comment> findByPin(Pin pin);
+    //1. pin -> comment list 전체
+    public List<CommentDTO> readByPinId(Long pinId){
+        Optional<Pin> pin = pinRepository.findById(pinId);
+        List<Comment> commentList = commentRepository.findByPin(pin);
+        return commentToDTO(commentList);
+    }
+
+    //2. comment id 로 하나의 comment 검색
+    public List<CommentDTO> readById(Long id){
+        Comment comment = commentRepository.getById(id);
+        return commentToDTO(comment);
+    }
+    //3. 유저 별 comment 검색 필요할까?
+
 
     //Update -> updateComment(userId,pinId,commentId) original comment -> validation -> update -> commentToDTO
     public List<CommentDTO> updateComment(Comment comment, Long userId, Long pinId, Long commentId){
@@ -58,7 +73,7 @@ public class CommentService {
         }
         if (hasText(comment.getContent())) originalcomment.changeContent(comment.getContent());
 
-        return CommentToDTO(originalcomment);
+        return commentToDTO(originalcomment);
     }
     //Delete -> deleteComment(userId,pinId,commentId) -> validation -> delete (일단 DB delete)
 
@@ -99,9 +114,17 @@ public class CommentService {
         return commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("not found comment"));
     }
 
-    private List<CommentDTO> CommentToDTO(Comment comment){
+    private List<CommentDTO> commentToDTO(Comment comment){
         List<CommentDTO> list = new ArrayList<>();
         for (Comment attribute : List.of(comment)){
+            CommentDTO commentDTO = new CommentDTO(attribute);
+            list.add(commentDTO);
+        }
+        return list;
+    }
+    private List<CommentDTO> commentToDTO(List<Comment> commentList){
+        List<CommentDTO> list = new ArrayList<>();
+        for (Comment attribute : commentList){
             CommentDTO commentDTO = new CommentDTO(attribute);
             list.add(commentDTO);
         }

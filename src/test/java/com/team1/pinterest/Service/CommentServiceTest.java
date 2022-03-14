@@ -6,6 +6,7 @@ import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.Role;
 import com.team1.pinterest.Entitiy.User;
 import org.assertj.core.api.Assertions;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -80,4 +81,52 @@ class CommentServiceTest {
 
 
     }
+
+    @Test
+    void readByPinId() throws IOException {
+        User user1 = new User("홍길동","111@gmail.com","111");
+        em.persist(user1);
+
+        Pin pin1 = new Pin("스타트렉","대머리 아조씨", Role.PUBLIC,user1,"/asdad/asdkalsd.jpg");
+        em.persist(pin1);
+        User user2 = new User("고길동","111@gmail.com","111");
+        em.persist(user2);
+
+        List<CommentDTO> serviceComment1 = commentService.createComment(user1.getId(), pin1.getId(), "자라나라 머리머리1");
+        List<CommentDTO> serviceComment2 = commentService.createComment(user2.getId(), pin1.getId(), "자라나라 머리머리2");
+        List<CommentDTO> serviceComment3 = commentService.createComment(user1.getId(), pin1.getId(), "자라나라 머리머리3");
+        List<CommentDTO> serviceComment4 = commentService.createComment(user2.getId(), pin1.getId(), "자라나라 머리머리4");
+
+        List<CommentDTO> commentDTOS = commentService.readByPinId(pin1.getId());
+
+        for (CommentDTO commentDTO:
+            commentDTOS ) {
+            System.out.println("commentDTO.getContent() = " + commentDTO.getContent());
+        }
+        
+
+    }
+
+    @Test
+    void readById() throws IOException {
+        User user1 = new User("홍길동","111@gmail.com","111");
+        em.persist(user1);
+
+        Pin pin1 = new Pin("스타트렉","대머리 아조씨", Role.PUBLIC,user1,"/asdad/asdkalsd.jpg");
+        em.persist(pin1);
+        User user2 = new User("고길동","111@gmail.com","111");
+        em.persist(user2);
+
+        List<CommentDTO> serviceComment1 = commentService.createComment(user1.getId(), pin1.getId(), "자라나라 머리머리1");
+
+
+        Comment comment  = new Comment(user1,pin1,"모발 뿜뿜");
+        em.persist(comment);
+        List<CommentDTO> comment1 = commentService.createComment(comment.getUser().getId(), comment.getPin().getId(), comment.getContent());
+
+        List<CommentDTO> result = commentService.readById(comment.getId());
+
+        Assertions.assertThat(comment1.get(0).getContent()).isEqualTo(result.get(0).getContent());
+    }
+
 }
