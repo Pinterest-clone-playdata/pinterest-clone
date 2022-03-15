@@ -1,13 +1,17 @@
 package com.team1.pinterest.Service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.team1.pinterest.DTO.PinDTO;
 import com.team1.pinterest.DTO.PinForm;
+import com.team1.pinterest.DTO.PinSearchCondition;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.User;
 import com.team1.pinterest.Repository.PinRepository;
 import com.team1.pinterest.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,10 +78,32 @@ public class PinService {
         pinRepository.delete(pin);
     }
 
+    @Transactional(readOnly = true)
+    public List<PinDTO> getOnePin(Long pinId){
+        Pin pin = findByPinId(pinId);
+        return PinToDTO(pin);
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<PinDTO> getPinsAtFollower(Pageable pageable, Long userId){
+        User user = findById(userId);
+        return pinRepository.findFollowersByUser(pageable, user);
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<PinDTO> getPinsAtHome(Pageable pageable, PinSearchCondition condition){
+        return pinRepository.findAllPinHome(pageable,condition);
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<PinDTO> getPinsByAuthUser(Pageable pageable, Long userId, PinSearchCondition condition){
+        User user = findById(userId);
+        return pinRepository.findMyPins(pageable,user,condition);
+    }
 
     // 편의 메서드 //
     private Pin findByPinId(Long pinId) {
-        return pinRepository.findById(pinId).orElseThrow(() -> new IllegalArgumentException("not found pin"));
+        return pinRepository.findById(pinId).orElseThrow(() -> new NotFoundException("not found pin"));
     }
 
     private void validation(Pin pin) {
@@ -93,7 +119,7 @@ public class PinService {
     }
 
     private User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("must have user"));
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("must have user"));
     }
 
     private List<PinDTO> PinToDTO(Pin pin) {
