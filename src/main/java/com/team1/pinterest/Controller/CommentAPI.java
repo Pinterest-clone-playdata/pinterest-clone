@@ -4,6 +4,7 @@ import com.team1.pinterest.DTO.Basic.ResponseDTO;
 import com.team1.pinterest.DTO.CommentDTO;
 import com.team1.pinterest.DTO.PinDTO;
 import com.team1.pinterest.DTO.PinForm;
+import com.team1.pinterest.Entitiy.Comment;
 import com.team1.pinterest.Service.CommentService;
 import com.team1.pinterest.Service.PinService;
 import com.team1.pinterest.Service.UserService;
@@ -64,6 +65,19 @@ public class CommentAPI {
         try {
             List<CommentDTO> dto = commentService.readById(commentId);
             ResponseDTO<CommentDTO> response =ResponseDTO.<CommentDTO>builder().data(dto).status(200).build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+    @PatchMapping("/pin/{pinId}/comment/{commentId}")
+    public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO,@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId){
+        try {
+            Long userId = commentDTO.getUserId(); //나중에 로그인 설정 후 변경?
+            Comment comment  = CommentDTO.toEntity(commentDTO);
+            List<CommentDTO> dto = commentService.updateComment(comment,userId,pinId,commentId);
+            ResponseDTO<CommentDTO> response = ResponseDTO.<CommentDTO>builder().data(dto).status(200).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();

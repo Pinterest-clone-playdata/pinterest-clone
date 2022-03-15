@@ -25,4 +25,7 @@ public class CommentDTO {
         pinId = comment.getPin().getId();
         content = comment.getContent();
     }
+    public static Comment toEntity(final CommentDTO dto){
+        return new Comment(dto.content);
+    }
 }

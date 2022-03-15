@@ -65,7 +65,9 @@ public class CommentService {
     public List<CommentDTO> updateComment(Comment comment, Long userId, Long pinId, Long commentId){
         //comment user setter 필요할까?
         User user = findById(userId);
+        Pin pin = findByPinId(pinId);
         comment.setUser(user);
+        comment.setPin(pin);
         validation(comment);
         Comment originalcomment = findByCommentId(commentId);
         if(originalcomment.getUser() != comment.getUser()){
