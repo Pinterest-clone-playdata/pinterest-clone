@@ -3,6 +3,7 @@ package com.team1.pinterest.Controller;
 import com.team1.pinterest.DTO.Basic.ResponseDTO;
 import com.team1.pinterest.DTO.CommentDTO;
 import com.team1.pinterest.DTO.PinDTO;
+import com.team1.pinterest.DTO.PinForm;
 import com.team1.pinterest.Service.CommentService;
 import com.team1.pinterest.Service.PinService;
 import com.team1.pinterest.Service.UserService;
@@ -46,6 +47,27 @@ public class CommentAPI {
         }
     }
 
+    @GetMapping("/pin/{pinId}/comment")
+    public ResponseEntity<?> getCommentAllAtPin(@PathVariable("pinId")Long piniId){
+        try {
+            List<CommentDTO> dto  = commentService.readByPinId(piniId);
+            ResponseDTO<CommentDTO> response = ResponseDTO.<CommentDTO>builder().status(200).data(dto).build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+    @GetMapping("/pin/{pinId}/comment/{commentId}")
+    public ResponseEntity<?> getOneComment(@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId){
 
-
+        try {
+            List<CommentDTO> dto = commentService.readById(commentId);
+            ResponseDTO<CommentDTO> response =ResponseDTO.<CommentDTO>builder().data(dto).status(200).build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 }
