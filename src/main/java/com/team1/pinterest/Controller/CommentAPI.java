@@ -74,7 +74,7 @@ public class CommentAPI {
     @PatchMapping("/pin/{pinId}/comment/{commentId}")
     public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO,@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId){
         try {
-            Long userId = commentDTO.getUserId(); //나중에 로그인 설정 후 변경?
+            Long userId = 1L; //로그인 설정 후 변경
             Comment comment  = CommentDTO.toEntity(commentDTO);
             List<CommentDTO> dto = commentService.updateComment(comment,userId,pinId,commentId);
             ResponseDTO<CommentDTO> response = ResponseDTO.<CommentDTO>builder().data(dto).status(200).build();
@@ -84,4 +84,17 @@ public class CommentAPI {
             return ResponseEntity.badRequest().body(response);
         }
     }
+    @DeleteMapping("/pin/{pinId}/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable("commentId") Long commentId){
+        try {
+            Long userId = 1L; //로그인 설정 후 변경
+            commentService.deleteComment(userId,commentId);
+            ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("delete complete").build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e){
+            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
 }
