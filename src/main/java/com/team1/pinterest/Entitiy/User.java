@@ -34,7 +34,10 @@ public class User extends BasicTime {
     private String path;
 
     @OneToMany(mappedBy = "user")
-    private List<Pin> pins = new ArrayList<>();
+    private final List<Pin> pins = new ArrayList<>();
+
+    @OneToMany(mappedBy = "follower")
+    private final List<Follower> followers = new ArrayList<>();
 
     //== 생성 메서드 ==//
     public User(String username, String email, String password) {

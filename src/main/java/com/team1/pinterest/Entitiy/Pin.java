@@ -26,7 +26,7 @@ public class Pin extends BasicTime {
     @Column(nullable = false)
     private String path;
 
-    @Column(length = 50, nullable = false, unique = true)
+    @Column(length = 50, nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -41,7 +41,7 @@ public class Pin extends BasicTime {
     private User user;
 
     @Column(columnDefinition = "int")
-    private int Count;
+    private int count;
 
     @OneToMany(mappedBy = "pin", cascade = CascadeType.ALL)
     Set<LikeImage> likes = new HashSet<>();
@@ -70,11 +70,11 @@ public class Pin extends BasicTime {
 
     // == 편의 메서드 == //
     public void plusCount(){
-        Count ++;
+        count ++;
     }
 
     public void minusCount(){
-        Count --;
+        count --;
     }
 
     public void setUser(User user) {
