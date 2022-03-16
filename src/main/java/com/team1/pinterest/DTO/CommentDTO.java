@@ -16,12 +16,16 @@ public class CommentDTO {
     private Long pinId;
     private String content;
 
-
+    public CommentDTO() {
+    }
 
     public CommentDTO(Comment comment){
         id = comment.getId();
         userId = comment.getUser().getId();
         pinId = comment.getPin().getId();
         content = comment.getContent();
+    }
+    public static Comment toEntity(final CommentDTO dto){
+        return new Comment(dto.content);
     }
 }

@@ -33,6 +33,10 @@ public class Comment extends BasicTime {
     @Column(length = 1000, nullable = false)
     private String content;
 
+    public Comment(String content) {
+        this.content = content;
+    }
+
     public Comment(User user, Pin pin, String content) {
         this.user = user;
         this.pin = pin;
@@ -41,6 +45,9 @@ public class Comment extends BasicTime {
 
     public void setUser(User user) {
         this.user = user;
+    }
+    public void setPin(Pin pin) {
+        this.pin = pin;
     }
 
     public void changeContent(String content) {
