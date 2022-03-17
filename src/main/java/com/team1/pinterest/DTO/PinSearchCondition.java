@@ -14,5 +14,5 @@ public class PinSearchCondition {
     private String title;
     private String username;
     private String content;
-    private String orderBy;
+    private String orderBy = "Date";
 }
