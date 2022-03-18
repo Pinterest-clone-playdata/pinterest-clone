@@ -48,7 +48,6 @@ public class FollowerService {
 
     public Slice<FollowerDTO> search(Pageable pageable, FollowerSearchCondition condition){
         return followerRepository.findFollowerWithSlice(pageable,condition);
-
     }
 
     private boolean isNotAlreadyFollower(User fromUser, User toUser) {
