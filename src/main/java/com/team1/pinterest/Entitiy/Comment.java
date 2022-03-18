@@ -19,7 +19,7 @@ public class Comment extends BasicTime {
     //Content  (varchar2 1000 - 65535)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Comment_ID")
+    @Column(name = "COMMENT_ID")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
