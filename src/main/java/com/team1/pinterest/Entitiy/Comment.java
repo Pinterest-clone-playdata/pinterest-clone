@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -33,9 +36,14 @@ public class Comment extends BasicTime {
     @Column(length = 1000, nullable = false)
     private String content;
 
+    @Column(columnDefinition = "int")
+    private int count;
+
     public Comment(String content) {
         this.content = content;
     }
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    Set<CommentLike> likes = new HashSet<>();
 
     public Comment(User user, Pin pin, String content) {
         this.user = user;
@@ -43,9 +51,18 @@ public class Comment extends BasicTime {
         this.content = content;
     }
 
+    public void plusCount(){
+        count ++;
+    }
+
+    public void minusCount(){
+        count --;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
+
     public void setPin(Pin pin) {
         this.pin = pin;
     }
