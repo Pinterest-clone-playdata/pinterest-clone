@@ -2,7 +2,6 @@ package com.team1.pinterest.DTO;
 
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.Role;
-import com.team1.pinterest.Entitiy.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

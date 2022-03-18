@@ -1,9 +1,7 @@
 package com.team1.pinterest.Service;
 
 import com.team1.pinterest.Entitiy.Pin;
-import com.team1.pinterest.Entitiy.Role;
 import com.team1.pinterest.Entitiy.User;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Profile("test")
 @SpringBootTest

@@ -1,6 +1,8 @@
 package com.team1.pinterest.Entitiy;
 
+
 import com.team1.pinterest.Entitiy.Basic.BasicTime;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,8 +29,9 @@ public class User extends BasicTime {
     @Column(length = 255)
     private String email;
 
-    @Column(length = 20)
-    private String password;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 
     @Column
     private String path;
@@ -37,16 +40,21 @@ public class User extends BasicTime {
     private List<Pin> pins = new ArrayList<>();
 
     //== 생성 메서드 ==//
-    public User(String username, String email, String password) {
+    @Builder
+    public User(String username, String email, String path, UserRole role) {
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.path = path;
+        this.role = role;
     }
 
-    public User(String username, String email, String password, String path) {
+    public User update(String username, String path) {
         this.username = username;
-        this.email = email;
-        this.password = password;
         this.path = path;
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
     }
 }

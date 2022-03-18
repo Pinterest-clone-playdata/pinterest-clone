@@ -2,31 +2,23 @@ package com.team1.pinterest.Service;
 
 import com.team1.pinterest.DTO.PinDTO;
 import com.team1.pinterest.DTO.PinForm;
-import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.Role;
 import com.team1.pinterest.Entitiy.User;
-import io.findify.s3mock.S3Mock;
-import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import static com.team1.pinterest.Entitiy.RoleName.ROLE_USER;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @Profile("test")
@@ -53,7 +45,7 @@ class PinServiceTest {
         em.persist(user1);
         em.persist(user2);
 
-        PinForm pinForm = new PinForm("TITLE1", "content", Role.PUBLIC);
+        PinForm pinForm = new PinForm("TITLE1", "content", new Role(ROLE_USER));
         List<PinDTO> pin = pinService.createPin(pinForm,user1.getId(),OverSizeImage);
 
         for (PinDTO pinDTO : pin) {
