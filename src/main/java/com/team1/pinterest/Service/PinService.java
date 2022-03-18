@@ -44,7 +44,7 @@ public class PinService {
                 pinForm.getContent(),
                 pinForm.getRole(),
                 user,
-                fileName));
+                awsS3Service.getFileUrl(fileName)));
 
         return PinToDTO(pin);
     }
@@ -55,9 +55,7 @@ public class PinService {
 
         validation(pin);
         Pin originalPin = findByPinId(pinId);
-        if (originalPin.getUser() != pin.getUser()){
-            throw new IllegalArgumentException("작성자만 Pin을 수정할 수 있습니다.");
-        }
+        PinOrderCheckValidation(originalPin, pin.getUser(), "작성자만 Pin을 수정할 수 있습니다.");
 
         if (hasText(pin.getContent())) originalPin.changeContent(pin.getContent());
         if (hasText(pin.getTitle())) originalPin.changeTitle(pin.getTitle());
@@ -70,9 +68,7 @@ public class PinService {
         User user = findById(userId);
         Pin pin = findByPinId(pinId);
 
-        if (pin.getUser() != user){
-            throw new IllegalArgumentException("작성자만 Pin을 삭제할 수 있습니다.");
-        }
+        PinOrderCheckValidation(pin, user, "작성자만 Pin을 삭제할 수 있습니다.");
 
         awsS3Service.deleteFile(pin.getPath());
         pinRepository.delete(pin);
@@ -109,12 +105,12 @@ public class PinService {
     private void validation(Pin pin) {
         if (pin == null) {
             log.warn("Entity cannot be null");
-            throw new RuntimeException("Entity cannot be null");
+            throw new IllegalArgumentException("Entity cannot be null");
         }
 
         if(pin.getUser() == null){
             log.warn("Unknown user");
-            throw new RuntimeException("Unknown user");
+            throw new IllegalArgumentException("Unknown user");
         }
     }
 
@@ -126,10 +122,14 @@ public class PinService {
         List<PinDTO> list = new ArrayList<>();
         for (Pin attribute : List.of(pin)) {
             PinDTO pinDTO = new PinDTO(attribute);
-            pinDTO.setPath(awsS3Service.getFileUrl(pinDTO.getPath()));
             list.add(pinDTO);
         }
         return list;
     }
 
+    private void PinOrderCheckValidation(Pin originalPin, User user2, String s) {
+        if (originalPin.getUser() != user2) {
+            throw new IllegalArgumentException(s);
+        }
+    }
 }

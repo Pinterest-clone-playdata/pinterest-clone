@@ -8,7 +8,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static javax.persistence.FetchType.*;
@@ -43,8 +45,11 @@ public class Pin extends BasicTime {
     @Column(columnDefinition = "int")
     private int count;
 
-    @OneToMany(mappedBy = "pin", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pin", cascade = CascadeType.REMOVE)
     Set<LikeImage> likes = new HashSet<>();
+
+    @OneToMany(mappedBy = "pin", cascade = CascadeType.REMOVE)
+    List<Comment> comments = new ArrayList<>();
 
     // == 생성 메서드 == //
     public Pin(String title, String content, Role role) {
