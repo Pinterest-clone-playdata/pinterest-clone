@@ -1,6 +1,5 @@
 package com.team1.pinterest.Service;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.team1.pinterest.DTO.PinDTO;
 import com.team1.pinterest.DTO.PinForm;
 import com.team1.pinterest.DTO.PinSearchCondition;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,12 +32,11 @@ public class PinService {
     private final AwsS3Service awsS3Service;
 
     public List<PinDTO> createPin(PinForm pinForm,
-                             Long userId,
-                             MultipartFile multipartFile) throws IOException {
+                             Long userId) throws IOException {
 
         User user = findById(userId);
 
-        String fileName = fileProcessService.uploadImage(multipartFile);
+        String fileName = fileProcessService.uploadImage(pinForm.getMultipartFile());
         Pin pin = pinRepository.save(new Pin(pinForm.getTitle(),
                 pinForm.getContent(),
                 pinForm.getRole(),
@@ -103,7 +100,7 @@ public class PinService {
 
     // 편의 메서드 //
     private Pin findByPinId(Long pinId) {
-        return pinRepository.findById(pinId).orElseThrow(() -> new NotFoundException("not found pin"));
+        return pinRepository.findById(pinId).orElseThrow(() -> new IllegalArgumentException("not found pin"));
     }
 
     private void validation(Pin pin) {
@@ -119,7 +116,7 @@ public class PinService {
     }
 
     private User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("must have user"));
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("must have user"));
     }
 
     private List<PinDTO> PinToDTO(Pin pin) {
