@@ -3,7 +3,6 @@ package com.team1.pinterest.Controller;
 import com.team1.pinterest.DTO.PinDTO;
 import com.team1.pinterest.DTO.PinForm;
 import com.team1.pinterest.DTO.PinSearchCondition;
-import com.team1.pinterest.DTO.RegisterPinDTO;
 import com.team1.pinterest.DTO.Basic.ResponseDTO;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Service.PinService;
@@ -16,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -26,8 +26,6 @@ import java.util.List;
 public class PinAPI {
 
     private final PinService pinService;
-    private final UserService userService;
-
 
     /**
      * TempUserId = Auth적용시 변경
@@ -38,16 +36,15 @@ public class PinAPI {
      * Exception = MultipartFile 부재, 용량 초과, 사이즈가 너무 작을 경우, 유저가 없을 경우
      */
     @PostMapping("pin")
-    public ResponseEntity<?> createPin(@ModelAttribute RegisterPinDTO request) throws IOException {
+    public ResponseEntity<?> createPin(@ModelAttribute @Valid PinForm request) throws IOException {
+        Long tempUserId = 1L;
+        List<PinDTO> dto = pinService.createPin(request, tempUserId);
         try {
-            Long tempUserId = 1L;
-
-            List<PinDTO> dto = pinService.createPin(request.getPinForm(), tempUserId,request.getMultipartFile());
             ResponseDTO<PinDTO> response = ResponseDTO.<PinDTO>builder().data(dto).status(200).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e){
             ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 

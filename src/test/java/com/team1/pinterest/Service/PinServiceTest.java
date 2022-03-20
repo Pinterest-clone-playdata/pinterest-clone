@@ -57,7 +57,7 @@ class PinServiceTest {
         em.persist(user2);
 
         PinForm pinForm = new PinForm("TITLE1", "content", Role.PUBLIC);
-        List<PinDTO> pin = pinService.createPin(pinForm,user1.getId(),OverSizeImage);
+        List<PinDTO> pin = pinService.createPin(pinForm,user1.getId());
 
         for (PinDTO pinDTO : pin) {
             assertThat(pinDTO.getTitle()).isEqualTo("TITLE1");
@@ -77,8 +77,8 @@ class PinServiceTest {
         em.persist(user2);
 
         PinForm pinForm = new PinForm("TITLE1", "content", Role.PUBLIC);
-        List<PinDTO> pin = pinService.createPin(pinForm, user1.getId(), OverSizeImage);
-        List<PinDTO> pin2 = pinService.createPin(pinForm, user2.getId(), OverSizeImage);
+        List<PinDTO> pin = pinService.createPin(pinForm, user1.getId());
+        List<PinDTO> pin2 = pinService.createPin(pinForm, user2.getId());
 
         System.out.println("pin id = " + pin.get(0).getId());
 
