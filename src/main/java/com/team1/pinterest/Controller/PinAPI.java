@@ -40,6 +40,7 @@ public class PinAPI {
         List<PinDTO> dto = pinService.createPin(request, tempUserId);
 
         return getResponseEntity(dto);
+
     }
 
     @PatchMapping("pin/{pinId}")
