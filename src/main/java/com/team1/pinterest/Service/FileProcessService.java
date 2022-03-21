@@ -1,7 +1,6 @@
 package com.team1.pinterest.Service;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.team1.pinterest.Exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

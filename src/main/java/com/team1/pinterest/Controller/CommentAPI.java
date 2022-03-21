@@ -2,8 +2,6 @@ package com.team1.pinterest.Controller;
 
 import com.team1.pinterest.DTO.Basic.ResponseDTO;
 import com.team1.pinterest.DTO.CommentDTO;
-import com.team1.pinterest.DTO.PinDTO;
-import com.team1.pinterest.DTO.PinForm;
 import com.team1.pinterest.Entitiy.Comment;
 import com.team1.pinterest.Service.CommentService;
 import com.team1.pinterest.Service.PinService;

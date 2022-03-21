@@ -1,10 +1,8 @@
 package com.team1.pinterest.Entitiy;
 
 import com.team1.pinterest.Entitiy.Basic.BasicTime;
-import com.team1.pinterest.Entitiy.Basic.BasicTimeWithCreatedBy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 

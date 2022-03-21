@@ -1,5 +1,6 @@
 package com.team1.pinterest.Entitiy;
 
+import com.team1.pinterest.Entitiy.Basic.BasicTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +12,7 @@ import static javax.persistence.GenerationType.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class LikeImage {
+public class LikeImage extends BasicTime {
 
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "Likes_ID")

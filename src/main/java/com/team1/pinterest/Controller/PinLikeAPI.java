@@ -15,10 +15,10 @@ public class PinLikeAPI {
 
     @PostMapping("pin/{pinId}/like")
     public ResponseEntity<?> likePin(@PathVariable("pinId") Long pinId){
-        try {
-            Long tempUserId = 1L;
+        Long tempUserId = 1L;
+        likeService.addLike(tempUserId,pinId);
 
-            likeService.addLike(tempUserId,pinId);
+        try {
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("pinLike success").build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e){
@@ -29,10 +29,10 @@ public class PinLikeAPI {
 
     @DeleteMapping("pin/{pinId}/like")
     public ResponseEntity<?> DeleteLikePin(@PathVariable("pinId") Long pinId){
-        try {
-            Long tempUserId = 1L;
+        Long tempUserId = 1L;
+        likeService.removeLike(tempUserId,pinId);
 
-            likeService.removeLike(tempUserId,pinId);
+        try {
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("pinLike Delete Successs").build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e){

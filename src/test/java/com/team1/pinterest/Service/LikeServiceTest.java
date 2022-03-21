@@ -4,6 +4,7 @@ import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.Role;
 import com.team1.pinterest.Entitiy.User;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,7 @@ class LikeServiceTest {
     @Autowired LikeService likeService;
 
     @Test
+    @DisplayName("add Like 테스트")
     void addLike() {
         User user1 = new User("user", "email", "password");
         User user2 = new User("user2", "email2", "password2");
@@ -38,6 +40,7 @@ class LikeServiceTest {
     }
 
     @Test
+    @DisplayName("Remove Like 테스트")
     void removeLike() {
         User user1 = new User("user", "email", "password");
         User user2 = new User("user2", "email2", "password2");

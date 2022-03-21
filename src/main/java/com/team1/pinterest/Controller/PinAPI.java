@@ -6,7 +6,6 @@ import com.team1.pinterest.DTO.PinSearchCondition;
 import com.team1.pinterest.DTO.Basic.ResponseDTO;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Service.PinService;
-import com.team1.pinterest.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -39,40 +38,30 @@ public class PinAPI {
     public ResponseEntity<?> createPin(@ModelAttribute @Valid PinForm request) throws IOException {
         Long tempUserId = 1L;
         List<PinDTO> dto = pinService.createPin(request, tempUserId);
-        try {
-            ResponseDTO<PinDTO> response = ResponseDTO.<PinDTO>builder().data(dto).status(200).build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e){
-            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.internalServerError().body(response);
-        }
+
+        return getResponseEntity(dto);
+
     }
 
     @PatchMapping("pin/{pinId}")
-    public ResponseEntity<?> updatePin(@RequestBody PinForm pinForm, @PathVariable("pinId") Long pinId){
-        try {
-            Long tempUserId = 1L;
-            Pin pin = PinForm.toEntity(pinForm);
+    public ResponseEntity<?> updatePin(@RequestBody @Valid PinForm pinForm, @PathVariable("pinId") Long pinId){
+        Long tempUserId = 1L;
+        Pin pin = PinForm.toEntity(pinForm);
 
-            List<PinDTO> dto = pinService.updatePin(pin, tempUserId, pinId);
-            ResponseDTO<PinDTO> response = ResponseDTO.<PinDTO>builder().data(dto).status(200).build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e){
-            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
-        }
+        List<PinDTO> dto = pinService.updatePin(pin, tempUserId, pinId);
+        return getResponseEntity(dto);
     }
 
     @DeleteMapping("pin/{pinId}")
     public ResponseEntity<?> deletePin(@PathVariable("pinId") Long pinId){
+        Long tempUserId = 1L;
+        pinService.deletePin(pinId,tempUserId);
         try {
-            Long tempUserId = 1L;
-            pinService.deletePin(pinId,tempUserId);
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("delete complete").build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e){
             ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 
@@ -84,7 +73,7 @@ public class PinAPI {
             return ResponseEntity.ok().body(response);
         } catch (Exception e){
             ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 
@@ -110,5 +99,17 @@ public class PinAPI {
         Long tempUserId = 1L;
         Slice<PinDTO> pins = pinService.getPinsByAuthUser(pageable, tempUserId, condition);
         return ResponseEntity.ok().body(pins);
+    }
+
+
+    //
+    private ResponseEntity<?> getResponseEntity(List<PinDTO> dto) {
+        try{
+            ResponseDTO<PinDTO> response = ResponseDTO.<PinDTO>builder().data(dto).status(200).build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e){
+            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
+            return ResponseEntity.internalServerError().body(response);
+        }
     }
 }

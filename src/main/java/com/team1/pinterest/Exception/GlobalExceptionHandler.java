@@ -34,6 +34,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ErrorResponse.toResponseEntity(OVER_FILESIZE);
     }
 
+    @ExceptionHandler(value = { CustomException.class })
+    protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
+        log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
+    }
+
     @Override
     protected ResponseEntity<Object> handleBindException(BindException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
         BindingResult bindingResult = exception.getBindingResult();

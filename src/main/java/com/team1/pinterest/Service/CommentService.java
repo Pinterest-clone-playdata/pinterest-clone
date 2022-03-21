@@ -2,7 +2,6 @@ package com.team1.pinterest.Service;
 
 
 import com.team1.pinterest.DTO.CommentDTO;
-import com.team1.pinterest.DTO.PinForm;
 import com.team1.pinterest.Entitiy.Comment;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.User;
