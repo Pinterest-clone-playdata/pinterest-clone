@@ -1,6 +1,5 @@
 package com.team1.pinterest.Service;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.team1.pinterest.DTO.PinDTO;
 import com.team1.pinterest.DTO.PinForm;
 import com.team1.pinterest.DTO.PinSearchCondition;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,12 +32,11 @@ public class PinService {
     private final AwsS3Service awsS3Service;
 
     public List<PinDTO> createPin(PinForm pinForm,
-                             Long userId,
-                             MultipartFile multipartFile) throws IOException {
+                             Long userId) throws IOException {
 
         User user = findById(userId);
 
-        String fileName = fileProcessService.uploadImage(multipartFile);
+        String fileName = fileProcessService.uploadImage(pinForm.getMultipartFile());
         Pin pin = pinRepository.save(new Pin(pinForm.getTitle(),
                 pinForm.getContent(),
                 pinForm.getRole(),
@@ -55,9 +52,7 @@ public class PinService {
 
         validation(pin);
         Pin originalPin = findByPinId(pinId);
-        if (originalPin.getUser() != pin.getUser()){
-            throw new IllegalArgumentException("작성자만 Pin을 수정할 수 있습니다.");
-        }
+        ValidationPinOrder(originalPin, pin.getUser(), "작성자만 Pin을 수정할 수 있습니다.");
 
         if (hasText(pin.getContent())) originalPin.changeContent(pin.getContent());
         if (hasText(pin.getTitle())) originalPin.changeTitle(pin.getTitle());
@@ -70,9 +65,7 @@ public class PinService {
         User user = findById(userId);
         Pin pin = findByPinId(pinId);
 
-        if (pin.getUser() != user){
-            throw new IllegalArgumentException("작성자만 Pin을 삭제할 수 있습니다.");
-        }
+        ValidationPinOrder(pin, user, "작성자만 Pin을 삭제할 수 있습니다.");
 
         awsS3Service.deleteFile(pin.getPath());
         pinRepository.delete(pin);
@@ -103,23 +96,23 @@ public class PinService {
 
     // 편의 메서드 //
     private Pin findByPinId(Long pinId) {
-        return pinRepository.findById(pinId).orElseThrow(() -> new NotFoundException("not found pin"));
+        return pinRepository.findById(pinId).orElseThrow(() -> new IllegalArgumentException("not found pin"));
     }
 
     private void validation(Pin pin) {
         if (pin == null) {
             log.warn("Entity cannot be null");
-            throw new RuntimeException("Entity cannot be null");
+            throw new IllegalArgumentException("Entity cannot be null");
         }
 
         if(pin.getUser() == null){
             log.warn("Unknown user");
-            throw new RuntimeException("Unknown user");
+            throw new IllegalArgumentException("Unknown user");
         }
     }
 
     private User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("must have user"));
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("must have user"));
     }
 
     private List<PinDTO> PinToDTO(Pin pin) {
@@ -132,4 +125,9 @@ public class PinService {
         return list;
     }
 
+    private void ValidationPinOrder(Pin originalPin, User user2, String s) {
+        if (originalPin.getUser() != user2) {
+            throw new IllegalArgumentException(s);
+        }
+    }
 }

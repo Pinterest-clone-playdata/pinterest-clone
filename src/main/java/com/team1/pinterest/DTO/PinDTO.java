@@ -2,7 +2,6 @@ package com.team1.pinterest.DTO;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.team1.pinterest.Entitiy.Pin;
-import com.team1.pinterest.Entitiy.Role;
 import lombok.*;
 
 @Getter @Setter
@@ -12,7 +11,6 @@ public class PinDTO {
     private String title;
     private String content;
     private String path;
-    private Role role;
     private String username;
     private int count;
 

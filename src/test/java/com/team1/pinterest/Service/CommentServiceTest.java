@@ -161,7 +161,9 @@ class CommentServiceTest {
 
         //Pin pin  = new Pin("TITLE","content",Role.PUBLIC);
         PinForm pinForm = new PinForm("TITLE1", "content", Role.PUBLIC);
-        List<PinDTO> pin = pinService.createPin(pinForm,user1.getId(),OverSizeImage);
+
+        // 현재 CreatePin 수정
+//        List<PinDTO> pin = pinService.createPin(pinForm,user1.getId(),OverSizeImage);
 
         // 추후 테스트 예정
 
