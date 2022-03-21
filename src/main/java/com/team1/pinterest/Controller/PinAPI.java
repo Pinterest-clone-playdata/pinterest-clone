@@ -6,7 +6,6 @@ import com.team1.pinterest.DTO.PinSearchCondition;
 import com.team1.pinterest.DTO.Basic.ResponseDTO;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Service.PinService;
-import com.team1.pinterest.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -54,14 +53,14 @@ public class PinAPI {
 
     @DeleteMapping("pin/{pinId}")
     public ResponseEntity<?> deletePin(@PathVariable("pinId") Long pinId){
+        Long tempUserId = 1L;
+        pinService.deletePin(pinId,tempUserId);
         try {
-            Long tempUserId = 1L;
-            pinService.deletePin(pinId,tempUserId);
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("delete complete").build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e){
             ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 
@@ -73,7 +72,7 @@ public class PinAPI {
             return ResponseEntity.ok().body(response);
         } catch (Exception e){
             ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 

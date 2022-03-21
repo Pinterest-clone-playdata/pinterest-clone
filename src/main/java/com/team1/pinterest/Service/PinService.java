@@ -41,7 +41,7 @@ public class PinService {
                 pinForm.getContent(),
                 pinForm.getRole(),
                 user,
-                fileName));
+                awsS3Service.getFileUrl(fileName)));
 
         return PinToDTO(pin);
     }
@@ -119,7 +119,6 @@ public class PinService {
         List<PinDTO> list = new ArrayList<>();
         for (Pin attribute : List.of(pin)) {
             PinDTO pinDTO = new PinDTO(attribute);
-            pinDTO.setPath(awsS3Service.getFileUrl(pinDTO.getPath()));
             list.add(pinDTO);
         }
         return list;

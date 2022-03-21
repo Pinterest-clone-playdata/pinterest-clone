@@ -1,7 +1,5 @@
 package com.team1.pinterest.Controller;
 
-import com.team1.pinterest.Entitiy.Pin;
-import com.team1.pinterest.Entitiy.Role;
 import com.team1.pinterest.Entitiy.User;
 import com.team1.pinterest.Service.FollowerService;
 import com.team1.pinterest.Service.LikeService;

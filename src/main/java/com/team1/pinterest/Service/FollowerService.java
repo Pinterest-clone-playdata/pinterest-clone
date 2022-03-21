@@ -4,6 +4,7 @@ import com.team1.pinterest.DTO.FollowerDTO;
 import com.team1.pinterest.DTO.FollowerSearchCondition;
 import com.team1.pinterest.Entitiy.Follower;
 import com.team1.pinterest.Entitiy.User;
+import com.team1.pinterest.Exception.CustomException;
 import com.team1.pinterest.Repository.FollowerRepository;
 import com.team1.pinterest.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.team1.pinterest.Exception.ErrorCode.*;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -23,15 +26,15 @@ public class FollowerService {
     private final UserRepository userRepository;
 
     public boolean save(Long fromId, Long toId){
-        User fromUser = userRepository.findById(fromId).orElseThrow();
-        User toUser = userRepository.findById(toId).orElseThrow();
+        User fromUser = findById(fromId);
+        User toUser = findById(toId);
 
         if (isNotAlreadyFollower(fromUser,toUser)){
             followerRepository.save(new Follower(fromUser,toUser));
             return true;
         }
 
-        return false;
+        throw new CustomException(DUPLICATE_RESOURCE);
     }
 
     public boolean remove(Long fromId, Long toId){
@@ -43,7 +46,7 @@ public class FollowerService {
             followerRepository.delete(search.orElseThrow());
             return true;
         }
-        return false;
+        throw new CustomException(NOT_FOLLOW);
     }
 
     public Slice<FollowerDTO> search(Pageable pageable, FollowerSearchCondition condition){
@@ -52,5 +55,9 @@ public class FollowerService {
 
     private boolean isNotAlreadyFollower(User fromUser, User toUser) {
         return followerRepository.findByFollowerAndFollowee(fromUser,toUser).isEmpty();
+    }
+
+    private User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("must have user"));
     }
 }
