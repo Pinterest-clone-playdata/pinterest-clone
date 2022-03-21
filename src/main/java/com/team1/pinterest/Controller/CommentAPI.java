@@ -6,6 +6,13 @@ import com.team1.pinterest.Entitiy.Comment;
 import com.team1.pinterest.Service.CommentService;
 import com.team1.pinterest.Service.PinService;
 import com.team1.pinterest.Service.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +25,10 @@ import java.util.List;
 @RequiredArgsConstructor //Private final
 @Slf4j
 @RequestMapping("v1")
+
 public class CommentAPI {
+
+
 
     private final PinService pinService;
     private final CommentService commentService;
@@ -31,8 +41,18 @@ public class CommentAPI {
      * @return
      * @throws IOException
      */
+
+    @Operation(summary = "test hello", description = "hello api example")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "comment 등록 성공!", content = @Content(schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "200", description = "OK !!"),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST !!"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND !!"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR !!")
+    })
+
     @PostMapping("/pin/{pinId}/comment")
-    public ResponseEntity<?> createComment( @RequestBody CommentDTO request, @PathVariable("pinId") Long pinId ){
+    public ResponseEntity<?> createComment( @RequestBody CommentDTO request, @Parameter(description = "comment가 생성 될 pin 의 아이디를 입력해주세요.", required = true, example = "1") @PathVariable("pinId") Long pinId ){
         try{
             Long tempUserId = 1L;
             List<CommentDTO> dto = commentService.createComment(request.getUserId(),pinId, request.getContent());

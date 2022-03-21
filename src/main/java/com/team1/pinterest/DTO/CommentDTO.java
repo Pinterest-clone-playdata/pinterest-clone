@@ -1,18 +1,23 @@
 package com.team1.pinterest.DTO;
 
 import com.team1.pinterest.Entitiy.Comment;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//@Data
+
 @Getter @Setter
 @NoArgsConstructor
 public class CommentDTO {
 
+    @ApiModelProperty(example = "1")
     private Long id;
+    @ApiModelProperty(example = "1")
     private Long userId;
+    @ApiModelProperty(example = "1")
     private Long pinId;
+    @ApiModelProperty(example = "comment 입니다.")
     private String content;
 
     public CommentDTO(Comment comment){

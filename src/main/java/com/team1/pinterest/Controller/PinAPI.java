@@ -34,7 +34,11 @@ public class PinAPI {
      * @throws IOException
      * Exception = MultipartFile 부재, 용량 초과, 사이즈가 너무 작을 경우, 유저가 없을 경우
      */
-    @PostMapping("pin")
+    //@PostMapping("pin")
+    @RequestMapping(
+            path = "pin",
+            method = RequestMethod.POST,
+            consumes ="multipart/form-data")
     public ResponseEntity<?> createPin(@ModelAttribute @Valid PinForm request) throws IOException {
         Long tempUserId = 1L;
         List<PinDTO> dto = pinService.createPin(request, tempUserId);
