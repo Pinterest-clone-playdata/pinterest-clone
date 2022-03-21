@@ -58,6 +58,6 @@ public class FollowerService {
     }
 
     private User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("must have user"));
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저는 반드시 있어야 합니다."));
     }
 }

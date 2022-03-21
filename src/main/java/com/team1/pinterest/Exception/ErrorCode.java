@@ -27,6 +27,7 @@ public enum ErrorCode {
     NOT_FOLLOW(NOT_FOUND, "팔로우 중이지 않습니다"),
     LIKE_NOT_FOUND(NOT_FOUND, "좋아요 중이 아닙니다."),
     COMMENT_NOT_FOUND(NOT_FOUND,"코멘트가 존재하지 않습니다."),
+    DATA_NOT_FOUND(NOT_FOUND,"데이터를 찾을 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),

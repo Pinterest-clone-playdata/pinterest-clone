@@ -5,6 +5,7 @@ import com.team1.pinterest.DTO.PinForm;
 import com.team1.pinterest.DTO.PinSearchCondition;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.User;
+import com.team1.pinterest.Exception.CustomException;
 import com.team1.pinterest.Repository.PinRepository;
 import com.team1.pinterest.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.team1.pinterest.Exception.ErrorCode.*;
 import static org.springframework.util.StringUtils.*;
 
 @Service
@@ -96,23 +98,23 @@ public class PinService {
 
     // 편의 메서드 //
     private Pin findByPinId(Long pinId) {
-        return pinRepository.findById(pinId).orElseThrow(() -> new IllegalArgumentException("not found pin"));
+        return pinRepository.findById(pinId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
     }
 
     private void validation(Pin pin) {
         if (pin == null) {
             log.warn("Entity cannot be null");
-            throw new IllegalArgumentException("Entity cannot be null");
+            throw new IllegalArgumentException("엔티티는 비어있으면 안됩니다.");
         }
 
         if(pin.getUser() == null){
             log.warn("Unknown user");
-            throw new IllegalArgumentException("Unknown user");
+            throw new IllegalArgumentException("유저 정보를 알 수가 없습니다.");
         }
     }
 
     private User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("must have user"));
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저는 반드시 존재해야 합니다."));
     }
 
     private List<PinDTO> PinToDTO(Pin pin) {

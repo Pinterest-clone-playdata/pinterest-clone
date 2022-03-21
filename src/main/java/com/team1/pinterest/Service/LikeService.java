@@ -4,7 +4,6 @@ import com.team1.pinterest.Entitiy.LikeImage;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.User;
 import com.team1.pinterest.Exception.CustomException;
-import com.team1.pinterest.Exception.ErrorCode;
 import com.team1.pinterest.Repository.LikeRepository;
 import com.team1.pinterest.Repository.PinRepository;
 import com.team1.pinterest.Repository.UserRepository;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+import static com.team1.pinterest.Exception.ErrorCode.*;
 
 @Service
 @Transactional
@@ -32,7 +33,7 @@ public class LikeService {
             pin.plusCount();
             return true;
         } else {
-            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+            throw new CustomException(DUPLICATE_RESOURCE);
         }
     }
 
@@ -46,15 +47,15 @@ public class LikeService {
             pin.minusCount();
             return true;
         }
-        throw new CustomException(ErrorCode.LIKE_NOT_FOUND);
+        throw new CustomException(LIKE_NOT_FOUND);
     }
 
     private User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("must have user"));
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저는 반드시 있어야 합니다."));
     }
 
     private Pin findByPinId(Long pinId) {
-        return pinRepository.findById(pinId).orElseThrow(() -> new IllegalArgumentException("not found pin"));
+        return pinRepository.findById(pinId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
     }
 
     private boolean isNotAlreadyLike(User user, Pin pin) {

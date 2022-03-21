@@ -23,21 +23,21 @@ import static com.team1.pinterest.Exception.ErrorCode.*;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = { ConstraintViolationException.class, DataIntegrityViolationException.class})
-    protected ResponseEntity<ErrorResponse> handleDataException() {
+    protected ResponseEntity<ResponseDTO<?>> handleDataException() {
         log.error("handleDataException throw Exception : {}", DUPLICATE_RESOURCE);
-        return ErrorResponse.toResponseEntity(DUPLICATE_RESOURCE);
+        return ResponseDTO.toResponseEntity(DUPLICATE_RESOURCE);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    protected ResponseEntity<ErrorResponse> handleMaxSizeException() {
+    protected ResponseEntity<ResponseDTO<?>> handleMaxSizeException() {
         log.error("handleDataException throw Exception : {}", OVER_FILESIZE);
-        return ErrorResponse.toResponseEntity(OVER_FILESIZE);
+        return ResponseDTO.toResponseEntity(OVER_FILESIZE);
     }
 
     @ExceptionHandler(value = { CustomException.class })
-    protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
+    protected ResponseEntity<ResponseDTO<?>> handleCustomException(CustomException e) {
         log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
-        return ErrorResponse.toResponseEntity(e.getErrorCode());
+        return ResponseDTO.toResponseEntity(e.getErrorCode());
     }
 
     @Override
