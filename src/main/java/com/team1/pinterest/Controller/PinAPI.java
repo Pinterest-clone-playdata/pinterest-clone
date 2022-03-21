@@ -39,28 +39,17 @@ public class PinAPI {
     public ResponseEntity<?> createPin(@ModelAttribute @Valid PinForm request) throws IOException {
         Long tempUserId = 1L;
         List<PinDTO> dto = pinService.createPin(request, tempUserId);
-        try {
-            ResponseDTO<PinDTO> response = ResponseDTO.<PinDTO>builder().data(dto).status(200).build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e){
-            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.internalServerError().body(response);
-        }
+
+        return getResponseEntity(dto);
     }
 
     @PatchMapping("pin/{pinId}")
-    public ResponseEntity<?> updatePin(@RequestBody PinForm pinForm, @PathVariable("pinId") Long pinId){
-        try {
-            Long tempUserId = 1L;
-            Pin pin = PinForm.toEntity(pinForm);
+    public ResponseEntity<?> updatePin(@RequestBody @Valid PinForm pinForm, @PathVariable("pinId") Long pinId){
+        Long tempUserId = 1L;
+        Pin pin = PinForm.toEntity(pinForm);
 
-            List<PinDTO> dto = pinService.updatePin(pin, tempUserId, pinId);
-            ResponseDTO<PinDTO> response = ResponseDTO.<PinDTO>builder().data(dto).status(200).build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e){
-            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
-        }
+        List<PinDTO> dto = pinService.updatePin(pin, tempUserId, pinId);
+        return getResponseEntity(dto);
     }
 
     @DeleteMapping("pin/{pinId}")
@@ -110,5 +99,17 @@ public class PinAPI {
         Long tempUserId = 1L;
         Slice<PinDTO> pins = pinService.getPinsByAuthUser(pageable, tempUserId, condition);
         return ResponseEntity.ok().body(pins);
+    }
+
+
+    //
+    private ResponseEntity<?> getResponseEntity(List<PinDTO> dto) {
+        try{
+            ResponseDTO<PinDTO> response = ResponseDTO.<PinDTO>builder().data(dto).status(200).build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e){
+            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
+            return ResponseEntity.internalServerError().body(response);
+        }
     }
 }
