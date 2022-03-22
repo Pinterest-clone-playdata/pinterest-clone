@@ -52,66 +52,53 @@ public class CommentAPI {
 
     //@PostMapping("/pin/{pinId}/comment")
     @PostMapping("/pin-comment/{pinId}/comment")
-    public ResponseEntity<?> createComment( @RequestBody CommentDTO request, @Parameter(description = "comment가 생성 될 pin 의 아이디를 입력해주세요.", required = true, example = "1") @PathVariable("pinId") Long pinId ){
-        try{
-            Long tempUserId = 1L;
-            List<CommentDTO> dto = commentService.createComment(request.getUserId(),pinId, request.getContent());
-            ResponseDTO<CommentDTO> response =ResponseDTO.<CommentDTO>builder().data(dto).status(200).build();
-            return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> createComment( @RequestBody CommentDTO request, @Parameter(description = "comment가 생성 될 pin 의 아이디를 입력해주세요.", required = true, example = "1") @PathVariable("pinId") Long pinId ) throws IOException{
 
-
-        } catch (Exception e) {
-            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
-        }
+        Long tempUserId = 1L;
+        List<CommentDTO> dto = commentService.createComment(request.getUserId(),pinId, request.getContent());
+        return getResponseEntity(dto);
     }
 
     @GetMapping("/pin-comment/{pinId}/comment")
     public ResponseEntity<?> getCommentAllAtPin(@PathVariable("pinId")Long piniId){
-        try {
-            List<CommentDTO> dto  = commentService.readByPinId(piniId);
-            ResponseDTO<CommentDTO> response = ResponseDTO.<CommentDTO>builder().status(200).data(dto).build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e) {
-            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
-        }
+        List<CommentDTO> dto  = commentService.readByPinId(piniId);
+        return getResponseEntity(dto);
     }
     @GetMapping("/pin-comment/{pinId}/comment/{commentId}")
     public ResponseEntity<?> getOneComment(@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId){
+        List<CommentDTO> dto = commentService.readById(commentId);
+        return getResponseEntity(dto);
 
-        try {
-            List<CommentDTO> dto = commentService.readById(commentId);
-            ResponseDTO<CommentDTO> response =ResponseDTO.<CommentDTO>builder().data(dto).status(200).build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e) {
-            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
-        }
     }
     @PatchMapping("/pin-comment/{pinId}/comment/{commentId}")
     public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO,@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId){
-        try {
-            Long userId = 1L; //로그인 설정 후 변경
-            Comment comment  = CommentDTO.toEntity(commentDTO);
-            List<CommentDTO> dto = commentService.updateComment(comment,userId,pinId,commentId);
-            ResponseDTO<CommentDTO> response = ResponseDTO.<CommentDTO>builder().data(dto).status(200).build();
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e) {
-            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
-            return ResponseEntity.badRequest().body(response);
-        }
+        Long userId = 1L; //로그인 설정 후 변경
+        Comment comment  = CommentDTO.toEntity(commentDTO);
+        List<CommentDTO> dto = commentService.updateComment(comment,userId,pinId,commentId);
+        return getResponseEntity(dto);
     }
     @DeleteMapping("/pin-comment/{pinId}/comment/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable("commentId") Long commentId){
+        Long userId = 1L; //로그인 설정 후 변경
+        commentService.deleteComment(userId,commentId);
         try {
-            Long userId = 1L; //로그인 설정 후 변경
-            commentService.deleteComment(userId,commentId);
+
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("delete complete").build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e){
             ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
             return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    //
+    private ResponseEntity<?> getResponseEntity(List<CommentDTO> dto) {
+        try{
+            ResponseDTO<CommentDTO> response = ResponseDTO.<CommentDTO>builder().data(dto).status(200).build();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e){
+            ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();
+            return ResponseEntity.internalServerError().body(response);
         }
     }
 
