@@ -8,7 +8,6 @@ import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.Role;
 import com.team1.pinterest.Entitiy.User;
 import org.assertj.core.api.Assertions;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

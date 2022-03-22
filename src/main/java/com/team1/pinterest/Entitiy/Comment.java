@@ -39,11 +39,13 @@ public class Comment extends BasicTime {
     @Column(columnDefinition = "int")
     private int count;
 
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    Set<CommentLike> likes = new HashSet<>();
+
+
     public Comment(String content) {
         this.content = content;
     }
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
-    Set<CommentLike> likes = new HashSet<>();
 
     public Comment(User user, Pin pin, String content) {
         this.user = user;
