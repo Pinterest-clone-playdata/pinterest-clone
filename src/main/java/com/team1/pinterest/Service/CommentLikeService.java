@@ -4,7 +4,6 @@ import com.team1.pinterest.Entitiy.Comment;
 import com.team1.pinterest.Entitiy.CommentLike;
 import com.team1.pinterest.Entitiy.User;
 import com.team1.pinterest.Exception.CustomException;
-import com.team1.pinterest.Exception.ErrorCode;
 import com.team1.pinterest.Repository.CommentLikeRepository;
 import com.team1.pinterest.Repository.CommentRepository;
 import com.team1.pinterest.Repository.UserRepository;
@@ -31,6 +30,7 @@ public class CommentLikeService {
 
         if (isNotAlreadyCommentLike(user, comment)) {
             commentLikeRepository.save(new CommentLike(user,comment));
+            comment.plusCount();
             return true;
         }
 
@@ -44,11 +44,12 @@ public class CommentLikeService {
             throw new CustomException(UNAUTHORIZED_COMMENT);
         }
         commentLikeRepository.delete(commentLike);
+        commentLike.getComment().minusCount();
         return true;
     }
 
     private CommentLike CheckNotRegister(Long commentLikeId) {
-        return commentLikeRepository.findById(commentLikeId).orElseThrow(()-> new IllegalArgumentException(("Is not Register")));
+        return commentLikeRepository.findById(commentLikeId).orElseThrow(()-> new CustomException(LIKE_NOT_FOUND));
     }
 
     private CommentLike CheckExistComment(User user, Comment comment) {
