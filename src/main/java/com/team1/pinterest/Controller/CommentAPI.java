@@ -42,16 +42,16 @@ public class CommentAPI {
      * @throws IOException
      */
 
-    @Operation(summary = "test hello", description = "hello api example")
+    @Operation(summary = "코멘트 등록 기능", description = "유저가 핀에서 코멘트를 등록합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "comment 등록 성공!", content = @Content(schema = @Schema(implementation = ResponseDTO.class))),
-            @ApiResponse(responseCode = "200", description = "OK !!"),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST !!"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND !!"),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR !!")
     })
 
-    @PostMapping("/pin/{pinId}/comment")
+    //@PostMapping("/pin/{pinId}/comment")
+    @PostMapping("/pin-comment/{pinId}/comment")
     public ResponseEntity<?> createComment( @RequestBody CommentDTO request, @Parameter(description = "comment가 생성 될 pin 의 아이디를 입력해주세요.", required = true, example = "1") @PathVariable("pinId") Long pinId ){
         try{
             Long tempUserId = 1L;
@@ -66,7 +66,7 @@ public class CommentAPI {
         }
     }
 
-    @GetMapping("/pin/{pinId}/comment")
+    @GetMapping("/pin-comment/{pinId}/comment")
     public ResponseEntity<?> getCommentAllAtPin(@PathVariable("pinId")Long piniId){
         try {
             List<CommentDTO> dto  = commentService.readByPinId(piniId);
@@ -77,7 +77,7 @@ public class CommentAPI {
             return ResponseEntity.badRequest().body(response);
         }
     }
-    @GetMapping("/pin/{pinId}/comment/{commentId}")
+    @GetMapping("/pin-comment/{pinId}/comment/{commentId}")
     public ResponseEntity<?> getOneComment(@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId){
 
         try {
@@ -89,7 +89,7 @@ public class CommentAPI {
             return ResponseEntity.badRequest().body(response);
         }
     }
-    @PatchMapping("/pin/{pinId}/comment/{commentId}")
+    @PatchMapping("/pin-comment/{pinId}/comment/{commentId}")
     public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO,@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId){
         try {
             Long userId = 1L; //로그인 설정 후 변경
@@ -102,7 +102,7 @@ public class CommentAPI {
             return ResponseEntity.badRequest().body(response);
         }
     }
-    @DeleteMapping("/pin/{pinId}/comment/{commentId}")
+    @DeleteMapping("/pin-comment/{pinId}/comment/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable("commentId") Long commentId){
         try {
             Long userId = 1L; //로그인 설정 후 변경
