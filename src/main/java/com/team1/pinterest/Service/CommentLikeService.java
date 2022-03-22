@@ -61,11 +61,11 @@ public class CommentLikeService {
     }
 
     private Comment findByCommentId(Long commentId) {
-        return commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("must have comment"));
+        return commentRepository.findById(commentId).orElseThrow(() -> new CustomException(DATA_NOT_FOUND));
     }
 
     private User findById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("must have user"));
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저는 반드시 있어야 합니다."));
     }
 
 }
