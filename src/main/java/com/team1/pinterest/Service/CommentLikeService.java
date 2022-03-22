@@ -49,7 +49,7 @@ public class CommentLikeService {
     }
 
     private CommentLike CheckNotRegister(Long commentLikeId) {
-        return commentLikeRepository.findById(commentLikeId).orElseThrow(()-> new IllegalArgumentException(("Is not Register")));
+        return commentLikeRepository.findById(commentLikeId).orElseThrow(()-> new CustomException(LIKE_NOT_FOUND));
     }
 
     private CommentLike CheckExistComment(User user, Comment comment) {

@@ -106,7 +106,7 @@ class CommentServiceTest {
             commentDTOS ) {
             System.out.println("commentDTO.getContent() = " + commentDTO.getContent());
         }
-        
+
 
     }
 
@@ -133,7 +133,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @Rollback(value = false)
+    //@Rollback(value = false)
     void deleteComment() throws IOException {
         User user1 = new User("홍길동","111@gmail.com","111");
         em.persist(user1);
