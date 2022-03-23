@@ -15,7 +15,6 @@ import java.util.List;
 import static com.team1.pinterest.Entitiy.QUser.*;
 import static org.springframework.util.StringUtils.hasText;
 
-@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
