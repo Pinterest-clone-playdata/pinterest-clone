@@ -27,29 +27,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
         try {
             String token = parseBearerToken(request);
-            log.info("Filter is running...");
-
+            log.info("token = " + token);
             if (token != null && !token.equalsIgnoreCase("null")){
                 Long userId = Long.parseLong(tokenProvider.validateAndGetUserId(token));
-                log.info("Authenticated user Id : " + userId);
 
-                AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userId,
-                        null,
-                        AuthorityUtils.NO_AUTHORITIES
-                );
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                AbstractAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken
+                                (userId,null, AuthorityUtils.NO_AUTHORITIES);
+
+                authentication.setDetails
+                        (new WebAuthenticationDetailsSource().buildDetails(request));
+
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 securityContext.setAuthentication(authentication);
                 SecurityContextHolder.setContext(securityContext);
+                log.info(securityContext.toString());
             }
         } catch (Exception e){
-            logger.error("Could not set user authentication in sercurity context", e);
+            logger.error("Could not set user authentication in security Context " + e);
         }
 
         filterChain.doFilter(request,response);
+
     }
 
     private String parseBearerToken(HttpServletRequest request){
