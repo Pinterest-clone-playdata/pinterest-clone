@@ -4,6 +4,7 @@ import com.team1.pinterest.DTO.Basic.ResponseDTO;
 import com.team1.pinterest.Service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,9 +15,8 @@ public class PinLikeAPI {
     private final LikeService likeService;
 
     @PostMapping("pin/{pinId}/like")
-    public ResponseEntity<?> likePin(@PathVariable("pinId") Long pinId){
-        Long tempUserId = 1L;
-        likeService.addLike(tempUserId,pinId);
+    public ResponseEntity<?> likePin(@PathVariable("pinId") Long pinId, @AuthenticationPrincipal Long userId){
+        likeService.addLike(userId,pinId);
 
         try {
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("pinLike success").build();
@@ -28,9 +28,8 @@ public class PinLikeAPI {
     }
 
     @DeleteMapping("pin/{pinId}/like")
-    public ResponseEntity<?> DeleteLikePin(@PathVariable("pinId") Long pinId){
-        Long tempUserId = 1L;
-        likeService.removeLike(tempUserId,pinId);
+    public ResponseEntity<?> DeleteLikePin(@PathVariable("pinId") Long pinId, @AuthenticationPrincipal Long userId){
+        likeService.removeLike(userId,pinId);
 
         try {
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("pinLike Delete Successs").build();

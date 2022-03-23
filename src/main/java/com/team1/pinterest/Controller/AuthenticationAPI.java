@@ -27,7 +27,11 @@ public class AuthenticationAPI {
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @PostMapping("/auth/signup")
+    @RequestMapping(
+            path = "/auth/signup",
+            method = RequestMethod.POST,
+            consumes ="multipart/form-data")
+    //@PostMapping("/auth/signup")
     public ResponseEntity<?> signup(@Valid @ModelAttribute UserForm form) throws IOException {
         userService.createUser(form);
         ResponseDTO<Object> response = ResponseDTO.builder().message("create User success").status(200).build();

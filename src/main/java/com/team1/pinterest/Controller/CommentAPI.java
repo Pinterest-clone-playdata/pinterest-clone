@@ -16,8 +16,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -30,9 +32,9 @@ public class CommentAPI {
 
 
 
-    private final PinService pinService;
+
     private final CommentService commentService;
-    private final UserService userService;
+
 
     /**
      * TempUserId = Auth적용시 변경
@@ -52,34 +54,32 @@ public class CommentAPI {
 
     //@PostMapping("/pin/{pinId}/comment")
     @PostMapping("/pin-comment/{pinId}/comment")
-    public ResponseEntity<?> createComment( @RequestBody CommentDTO request, @Parameter(description = "comment가 생성 될 pin 의 아이디를 입력해주세요.", required = true, example = "1") @PathVariable("pinId") Long pinId ) throws IOException{
-
-        Long tempUserId = 1L;
-        List<CommentDTO> dto = commentService.createComment(request.getUserId(),pinId, request.getContent());
+    public ResponseEntity<?> createComment(@RequestBody @Valid CommentDTO request,
+                                           @PathVariable("pinId") Long pinId,
+                                           @AuthenticationPrincipal Long userId) throws IOException{
+        List<CommentDTO> dto = commentService.createComment(userId,pinId, request.getContent());
         return getResponseEntity(dto);
     }
 
     @GetMapping("/pin-comment/{pinId}/comment")
-    public ResponseEntity<?> getCommentAllAtPin(@PathVariable("pinId")Long piniId){
-        List<CommentDTO> dto  = commentService.readByPinId(piniId);
+    public ResponseEntity<?> getCommentAllAtPin(@PathVariable("pinId")Long pinId){
+        List<CommentDTO> dto  = commentService.readByPinId(pinId);
         return getResponseEntity(dto);
     }
-    @GetMapping("/pin-comment/{pinId}/comment/{commentId}")
-    public ResponseEntity<?> getOneComment(@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId){
+    @GetMapping("/pin-comment/comment/{commentId}")
+    public ResponseEntity<?> getOneComment(@PathVariable("commentId") Long commentId){
         List<CommentDTO> dto = commentService.readById(commentId);
         return getResponseEntity(dto);
 
     }
     @PatchMapping("/pin-comment/{pinId}/comment/{commentId}")
-    public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO,@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId){
-        Long userId = 1L; //로그인 설정 후 변경
+    public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO,@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId, @AuthenticationPrincipal Long userId){
         Comment comment  = CommentDTO.toEntity(commentDTO);
         List<CommentDTO> dto = commentService.updateComment(comment,userId,pinId,commentId);
         return getResponseEntity(dto);
     }
-    @DeleteMapping("/pin-comment/{pinId}/comment/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable("commentId") Long commentId){
-        Long userId = 1L; //로그인 설정 후 변경
+    @DeleteMapping("/pin-comment/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable("commentId") Long commentId,@AuthenticationPrincipal Long userId){
         commentService.deleteComment(userId,commentId);
         try {
 

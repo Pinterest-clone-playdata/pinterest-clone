@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,26 +40,26 @@ public class PinAPI {
             path = "pin",
             method = RequestMethod.POST,
             consumes ="multipart/form-data")
-    public ResponseEntity<?> createPin(@ModelAttribute @Valid PinForm request) throws IOException {
-        Long tempUserId = 1L;
-        List<PinDTO> dto = pinService.createPin(request, tempUserId);
+    public ResponseEntity<?> createPin(@ModelAttribute @Valid PinForm request, @AuthenticationPrincipal Long userId) throws IOException {
+
+        List<PinDTO> dto = pinService.createPin(request, userId);
 
         return getResponseEntity(dto);
     }
 
     @PatchMapping("pin/{pinId}")
-    public ResponseEntity<?> updatePin(@RequestBody @Valid PinForm pinForm, @PathVariable("pinId") Long pinId){
-        Long tempUserId = 1L;
+    public ResponseEntity<?> updatePin(@RequestBody @Valid PinForm pinForm, @PathVariable("pinId") Long pinId, @AuthenticationPrincipal Long userId){
         Pin pin = PinForm.toEntity(pinForm);
 
-        List<PinDTO> dto = pinService.updatePin(pin, tempUserId, pinId);
+        List<PinDTO> dto = pinService.updatePin(pin, userId, pinId);
         return getResponseEntity(dto);
     }
 
     @DeleteMapping("pin/{pinId}")
-    public ResponseEntity<?> deletePin(@PathVariable("pinId") Long pinId){
-        Long tempUserId = 1L;
-        pinService.deletePin(pinId,tempUserId);
+    public ResponseEntity<?> deletePin(@PathVariable("pinId") Long pinId, @AuthenticationPrincipal Long userId){
+
+        pinService.deletePin(pinId,userId);
+
         try {
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("delete complete").build();
             return ResponseEntity.ok().body(response);
@@ -88,19 +89,19 @@ public class PinAPI {
     }
 
     @GetMapping("pin/follower")
-    public ResponseEntity<?> getFollower(@PageableDefault(size = 15) Pageable pageable){
+    public ResponseEntity<?> getFollower(@PageableDefault(size = 15) Pageable pageable, @AuthenticationPrincipal Long userId){
 
-        Long tempUserId = 1L;
-        Slice<PinDTO> pinsAtFollower = pinService.getPinsAtFollower(pageable, tempUserId);
+
+        Slice<PinDTO> pinsAtFollower = pinService.getPinsAtFollower(pageable, userId);
         return ResponseEntity.ok().body(pinsAtFollower);
     }
 
     @GetMapping("pin/user")
     public ResponseEntity<?> getMyPins(@PageableDefault(size = 15) Pageable pageable,
                                        PinSearchCondition condition
-                                       ){
-        Long tempUserId = 1L;
-        Slice<PinDTO> pins = pinService.getPinsByAuthUser(pageable, tempUserId, condition);
+                                       , @AuthenticationPrincipal Long userId){
+
+        Slice<PinDTO> pins = pinService.getPinsByAuthUser(pageable, userId, condition);
         return ResponseEntity.ok().body(pins);
     }
 

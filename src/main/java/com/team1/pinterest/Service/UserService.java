@@ -83,6 +83,9 @@ public class UserService {
         if (!userId.equals(loginId)){
             throw new CustomException(UNAUTHORIZED_COMMENT);
         }
+        if (!userRepository.existsById(userId)){
+            throw new CustomException(DATA_NOT_FOUND);
+        }
     }
 
     private User findById(Long userId) {
