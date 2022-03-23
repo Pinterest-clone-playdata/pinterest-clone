@@ -42,6 +42,7 @@ public class Comment extends BasicTime {
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     Set<CommentLike> likes = new HashSet<>();
 
+
     public Comment(String content) {
         this.content = content;
     }

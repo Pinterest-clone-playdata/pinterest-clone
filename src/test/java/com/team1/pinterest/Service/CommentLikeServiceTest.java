@@ -1,18 +1,19 @@
 package com.team1.pinterest.Service;
 
-import com.team1.pinterest.Entitiy.*;
+
+import com.team1.pinterest.Entitiy.Comment;
+import com.team1.pinterest.Entitiy.Pin;
+import com.team1.pinterest.Entitiy.Role;
+import com.team1.pinterest.Entitiy.User;
 import com.team1.pinterest.Repository.CommentLikeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 

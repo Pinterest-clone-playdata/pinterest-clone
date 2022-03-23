@@ -23,6 +23,7 @@ public enum ErrorCode {
     UNAUTHORIZED_COMMENT(UNAUTHORIZED, "등록한 유저만이 정보를 수정할 수 있습니다."),
     SIGNATURE_TOKEN(UNAUTHORIZED, "전자 서명이 잘못된 토큰입니다."),
     UNAUTHORIZED_TOKEN(UNAUTHORIZED, "사용 불가능한 토큰입니다."),
+    PASSWORD_MISMATCH(UNAUTHORIZED, "비밀번호가 틀렸습니다."),
 
     /* 403 Forbidden : 권한이 없는 사용자 */
     EXPIRED_TOKEN(FORBIDDEN, "만료된 JWT 토큰입니다."),
