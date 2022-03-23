@@ -1,6 +1,8 @@
 package com.team1.pinterest.Service;
 
+import com.team1.pinterest.DTO.UserDTO;
 import com.team1.pinterest.DTO.UserForm;
+import com.team1.pinterest.DTO.UserSearchCondition;
 import com.team1.pinterest.Entitiy.User;
 import com.team1.pinterest.Exception.CustomException;
 import com.team1.pinterest.Repository.UserRepository;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.team1.pinterest.Exception.ErrorCode.*;
 
@@ -61,6 +65,17 @@ public class UserService {
         user.setPassword(form.getPassword());
         user.setEmail(form.getEmail());
 
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDTO> getOneUser(Long userId){
+        List<User> user = List.of(findById(userId));
+        return user.stream().map(UserDTO::new).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDTO> getUsers(UserSearchCondition condition){
+        return userRepository.findUsersByUsername(condition);
     }
 
     // == 편의 메서드 == //

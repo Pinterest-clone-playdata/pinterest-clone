@@ -33,10 +33,10 @@ public class User extends BasicTime {
     @Column
     private String path;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private final List<Pin> pins = new ArrayList<>();
 
-    @OneToMany(mappedBy = "follower")
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.REMOVE)
     private final List<Follower> followers = new ArrayList<>();
 
     //== 생성 메서드 ==//
