@@ -3,6 +3,7 @@ package com.team1.pinterest.Entitiy;
 import com.team1.pinterest.Entitiy.Basic.BasicTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import static javax.persistence.GenerationType.*;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 public class User extends BasicTime {
 
@@ -26,7 +27,7 @@ public class User extends BasicTime {
     @Column(length = 255)
     private String email;
 
-    @Column(length = 20)
+    @Column(length = 200)
     private String password;
 
     @Column

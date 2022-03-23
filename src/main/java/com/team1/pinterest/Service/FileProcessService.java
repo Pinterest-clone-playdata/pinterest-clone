@@ -1,6 +1,7 @@
 package com.team1.pinterest.Service;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.team1.pinterest.Exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
+
+import static com.team1.pinterest.Exception.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -77,7 +80,7 @@ public class FileProcessService {
             }
         }
         if (!FileContextType){
-            throw new IllegalStateException("gif,jpeg,jpg,png 파일만 업로드가 가능합니다.");
+            throw new CustomException(CONTEXT_TYPE_ERROR);
         }
     }
 }
