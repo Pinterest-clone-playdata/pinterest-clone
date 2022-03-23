@@ -4,6 +4,7 @@ import com.team1.pinterest.DTO.Basic.ResponseDTO;
 import com.team1.pinterest.Service.FollowerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,10 +15,9 @@ public class FollowerAPI {
     private final FollowerService followerService;
 
     @PostMapping("user/follow/{userId}")
-    public ResponseEntity<?> followUser(@PathVariable("userId") Long userId){
+    public ResponseEntity<?> followUser(@PathVariable("userId") Long userId, @AuthenticationPrincipal Long loginId){
         try {
-            Long tempUserId = 1L;
-            followerService.save(tempUserId,userId);
+            followerService.save(loginId,userId);
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("user Follow success").build();
 
             return ResponseEntity.ok().body(response);
@@ -30,10 +30,9 @@ public class FollowerAPI {
     }
 
     @DeleteMapping("user/follow/{userId}")
-    public ResponseEntity<?> followCancelUser(@PathVariable("userId") Long userId){
+    public ResponseEntity<?> followCancelUser(@PathVariable("userId") Long userId, @AuthenticationPrincipal Long loginId){
         try {
-            Long tempUserId = 1L;
-            followerService.remove(tempUserId,userId);
+            followerService.remove(loginId,userId);
             ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("user Follow success").build();
 
             return ResponseEntity.ok().body(response);
