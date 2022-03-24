@@ -13,6 +13,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.team1.pinterest.Exception.ErrorCode.*;
@@ -28,6 +29,10 @@ public class FollowerService {
     public boolean save(Long fromId, Long toId){
         User fromUser = findById(fromId);
         User toUser = findById(toId);
+
+        if (Objects.equals(fromId, toId)){
+            throw new CustomException(CANNOT_FOLLOW_MYSELF);
+        }
 
         if (isNotAlreadyFollower(fromUser,toUser)){
             followerRepository.save(new Follower(fromUser,toUser));

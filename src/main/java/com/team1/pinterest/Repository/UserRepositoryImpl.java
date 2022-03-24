@@ -1,6 +1,6 @@
 package com.team1.pinterest.Repository;
 
-import com.querydsl.core.types.Predicate;
+
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.team1.pinterest.DTO.QUserDTO;
@@ -8,6 +8,7 @@ import com.team1.pinterest.DTO.UserDTO;
 import com.team1.pinterest.DTO.UserSearchCondition;
 import com.team1.pinterest.Entitiy.User;
 import lombok.RequiredArgsConstructor;
+
 
 import javax.persistence.EntityManager;
 import java.util.List;

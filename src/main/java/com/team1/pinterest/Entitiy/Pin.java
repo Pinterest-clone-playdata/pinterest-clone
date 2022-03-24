@@ -18,7 +18,7 @@ import static javax.persistence.GenerationType.*;
 public class Pin extends BasicTime {
 
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(columnDefinition = "int")
+    @Column(columnDefinition = "int", name = "PIN_ID")
     private Long id;
 
     @Column(nullable = false)

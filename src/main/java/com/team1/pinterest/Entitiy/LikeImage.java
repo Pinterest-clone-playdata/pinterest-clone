@@ -23,7 +23,7 @@ public class LikeImage extends BasicTime {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "IMAGE_ID")
+    @JoinColumn(name = "PIN_ID")
     private Pin pin;
 
     // == 생성 메서드 ==//

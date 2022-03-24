@@ -14,6 +14,7 @@ import static javax.persistence.GenerationType.*;
 public class Follower extends BasicTime {
 
     @Id @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "FOLLOWER_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
