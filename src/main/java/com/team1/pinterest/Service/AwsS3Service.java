@@ -33,4 +33,7 @@ public class AwsS3Service {
         return amazonS3.getUrl(amazonS3Component.getBucket(),fileName).toString();
     }
 
+    public String getFileName(String url){
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
 }

@@ -1,10 +1,8 @@
 package com.team1.pinterest.Entitiy;
 
 import com.team1.pinterest.Entitiy.Basic.BasicTime;
-import com.team1.pinterest.Entitiy.Basic.BasicTimeWithCreatedBy;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -20,13 +18,13 @@ import static javax.persistence.GenerationType.*;
 public class Pin extends BasicTime {
 
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(columnDefinition = "int")
+    @Column(columnDefinition = "int", name = "PIN_ID")
     private Long id;
 
     @Column(nullable = false)
     private String path;
 
-    @Column(length = 50, nullable = false, unique = true)
+    @Column(length = 50, nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -41,7 +39,7 @@ public class Pin extends BasicTime {
     private User user;
 
     @Column(columnDefinition = "int")
-    private int Count;
+    private int count;
 
     @OneToMany(mappedBy = "pin", cascade = CascadeType.ALL)
     Set<LikeImage> likes = new HashSet<>();
@@ -70,11 +68,11 @@ public class Pin extends BasicTime {
 
     // == 편의 메서드 == //
     public void plusCount(){
-        Count ++;
+        count ++;
     }
 
     public void minusCount(){
-        Count --;
+        count --;
     }
 
     public void setUser(User user) {

@@ -1,28 +1,26 @@
 package com.team1.pinterest.DTO;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.team1.pinterest.Config.AmazonS3Component;
+import com.querydsl.core.annotations.QueryProjection;
 import com.team1.pinterest.Entitiy.Pin;
-import com.team1.pinterest.Entitiy.Role;
-import com.team1.pinterest.Entitiy.User;
 import lombok.*;
 
 @Getter @Setter
 public class PinDTO {
 
+    private Long id;
     private String title;
     private String content;
     private String path;
-    private Role role;
-    private Long userId;
+    private String username;
     private int count;
 
+    @QueryProjection
     public PinDTO(Pin pin){
+        id = pin.getId();
         title = pin.getTitle();
         content = pin.getContent();
         path = pin.getPath();
-        role = pin.getRole();
-        userId = pin.getUser().getId();
         count = pin.getCount();
+        username = pin.getUser().getUsername();
     }
 }

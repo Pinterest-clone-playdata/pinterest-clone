@@ -11,22 +11,21 @@ import static javax.persistence.GenerationType.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Follower extends BasicTime {
-
+public class CommentLike extends BasicTime {
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "FOLLOWER_ID")
+    @Column(name = "Likes_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "From_ID")
-    private User follower;
+    @JoinColumn(name="USER_ID")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TO_ID")
-    private User followee;
+    @JoinColumn(name = "COMMENT_ID")
+    private Comment comment;
 
-    public Follower(User follower, User followee) {
-        this.follower = follower;
-        this.followee = followee;
+    public CommentLike(User user, Comment comment) {
+        this.user = user;
+        this.comment = comment;
     }
 }

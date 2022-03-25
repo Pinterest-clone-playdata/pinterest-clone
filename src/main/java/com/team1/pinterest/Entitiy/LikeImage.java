@@ -1,5 +1,6 @@
 package com.team1.pinterest.Entitiy;
 
+import com.team1.pinterest.Entitiy.Basic.BasicTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +12,7 @@ import static javax.persistence.GenerationType.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class LikeImage {
+public class LikeImage extends BasicTime {
 
     @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "Likes_ID")
@@ -22,7 +23,7 @@ public class LikeImage {
     private User user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "IMAGE_ID")
+    @JoinColumn(name = "PIN_ID")
     private Pin pin;
 
     // == 생성 메서드 ==//
