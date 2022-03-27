@@ -59,9 +59,9 @@ class PinRepositoryImplTest {
         pins.add(pin2);
         pins.add(pin1);
 
-        Slice<PinDTO> allPinHome = pinRepository.findAllPinHome(pageable, condition);
-        Slice<PinDTO> allPinHome2 = pinRepository.findAllPinHome(pageable, condition2);
-        Slice<PinDTO> allPinHome3 = pinRepository.findAllPinHome(pageable, condition3);
+        Slice<PinDTO> allPinHome = pinRepository.findAllPinHome();
+        Slice<PinDTO> allPinHome2 = pinRepository.findAllPinHome();
+        Slice<PinDTO> allPinHome3 = pinRepository.findAllPinHome();
 
         String username = allPinHome.getContent().get(0).getUsername();
         String title = allPinHome2.getContent().get(0).getTitle();

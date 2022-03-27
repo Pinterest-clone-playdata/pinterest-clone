@@ -7,6 +7,7 @@ import com.team1.pinterest.DTO.PinDTO;
 import com.team1.pinterest.DTO.PinSearchCondition;
 import com.team1.pinterest.DTO.QPinDTO;
 import com.team1.pinterest.Entitiy.User;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -32,26 +33,17 @@ public class PinRepositoryImpl implements PinRepositoryCustom{
     }
 
     @Override
-    public Slice<PinDTO> findAllPinHome(Pageable pageable, PinSearchCondition condition) {
+    public Slice<PinDTO> findAllPinHome() {
         List<PinDTO> fetch = queryFactory
                 .select(new QPinDTO(pin))
                 .from(pin)
                 .leftJoin(pin.user, user)
                 .fetchJoin()
-                .where(pinTitleContains(condition.getTitle())
-                        ,pinContentContains(condition.getContent())
-                        ,pinUsernameEq(condition.getUsername())
-                        ,pin.role.eq(PUBLIC))
-                .orderBy(pinOrderBy(condition.getOrderBy()))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1)
+                .orderBy(pinOrderBy("Date"))
                 .fetch();
 
         boolean hasNext = false;
-        if (fetch.size() > pageable.getPageSize()){
-            fetch.remove(pageable.getPageSize());
-            hasNext = true;
-        }
+        Pageable pageable = PageRequest.of(0, 100);
 
         return new SliceImpl<>(fetch, pageable, hasNext);
     }

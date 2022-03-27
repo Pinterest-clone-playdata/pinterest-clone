@@ -2,6 +2,7 @@ package com.team1.pinterest.Service;
 
 
 import com.team1.pinterest.DTO.CommentDTO;
+import com.team1.pinterest.DTO.CommentResponseDTO;
 import com.team1.pinterest.Entitiy.Comment;
 import com.team1.pinterest.Entitiy.Pin;
 import com.team1.pinterest.Entitiy.User;
@@ -32,7 +33,7 @@ public class CommentService {
 
     // Create -> createComment(id로)  (Comment(User user, Pin pin, String content)) -> commentToDTO
     //dto 로 변환 하지 않으면 어떻게 처리할 것인지도 고민 해보기
-    public List<CommentDTO> createComment(Long userId,
+    public List<CommentResponseDTO> createComment(Long userId,
                                           Long pinId,
                                           String content) throws IOException{
         User user = findById(userId);
@@ -47,7 +48,7 @@ public class CommentService {
     //Read -> findByPinId(Long pinId) or Pin ?? -> List<Comment> findByPin(Pin pin);
     //1. pin -> comment list 전체
     @Transactional(readOnly = true)
-    public List<CommentDTO> readByPinId(Long pinId){
+    public List<CommentResponseDTO> readByPinId(Long pinId){
         Optional<Pin> pin = pinRepository.findById(pinId);
         List<Comment> commentList = commentRepository.findByPin(pin);
         return commentToDTO(commentList);
@@ -55,7 +56,7 @@ public class CommentService {
 
     //2. comment id 로 하나의 comment 검색
     @Transactional(readOnly = true)
-    public List<CommentDTO> readById(Long id){
+    public List<CommentResponseDTO> readById(Long id){
         Comment comment = commentRepository.getById(id);
         return commentToDTO(comment);
     }
@@ -63,7 +64,7 @@ public class CommentService {
 
 
     //Update -> updateComment(userId,pinId,commentId) original comment -> validation -> update -> commentToDTO
-    public List<CommentDTO> updateComment(Comment comment, Long userId, Long pinId, Long commentId){
+    public List<CommentResponseDTO> updateComment(Comment comment, Long userId, Long pinId, Long commentId){
         //user == 현재 세션에서 수정하려는 유저
         User user = findById(userId);
         Pin pin = findByPinId(pinId);
@@ -134,18 +135,18 @@ public class CommentService {
         return commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException("not found comment"));
     }
 
-    private List<CommentDTO> commentToDTO(Comment comment){
-        List<CommentDTO> list = new ArrayList<>();
+    private List<CommentResponseDTO> commentToDTO(Comment comment){
+        List<CommentResponseDTO> list = new ArrayList<>();
         for (Comment attribute : List.of(comment)){
-            CommentDTO commentDTO = new CommentDTO(attribute);
+            CommentResponseDTO commentDTO = new CommentResponseDTO(attribute);
             list.add(commentDTO);
         }
         return list;
     }
-    private List<CommentDTO> commentToDTO(List<Comment> commentList){
-        List<CommentDTO> list = new ArrayList<>();
+    private List<CommentResponseDTO> commentToDTO(List<Comment> commentList){
+        List<CommentResponseDTO> list = new ArrayList<>();
         for (Comment attribute : commentList){
-            CommentDTO commentDTO = new CommentDTO(attribute);
+            CommentResponseDTO commentDTO = new CommentResponseDTO(attribute);
             list.add(commentDTO);
         }
         return list;

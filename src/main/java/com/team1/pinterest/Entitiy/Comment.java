@@ -53,12 +53,14 @@ public class Comment extends BasicTime {
         this.content = content;
     }
 
-    public void plusCount(){
+    public int plusCount(){
         count ++;
+        return count;
     }
 
-    public void minusCount(){
+    public int minusCount(){
         count --;
+        return count;
     }
 
     public void setUser(User user) {

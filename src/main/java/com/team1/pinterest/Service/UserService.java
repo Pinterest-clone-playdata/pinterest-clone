@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.team1.pinterest.Exception.ErrorCode.*;
@@ -32,11 +33,11 @@ public class UserService {
 
         userDuplicationCheck(userForm);
         User user = UserForm.toEntity(userForm);
-        if (!userForm.getProfile().isEmpty()){
-            String fileName = fileProcessService.uploadImage(userForm.getProfile());
-            String path = awsS3Service.getFileUrl(fileName);
-            user.pathSetting(path);
-        }
+//        if (!userForm.getProfile().isEmpty()){
+//            String fileName = fileProcessService.uploadImage(userForm.getProfile());
+//            String path = awsS3Service.getFileUrl(fileName);
+//            user.pathSetting(path);
+//        }
 
         userRepository.save(user);
     }
@@ -74,6 +75,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public boolean emailExists(String email){
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user == null) return false;
+        return true;
+    }
+
+    @Transactional(readOnly = true)
     public List<UserDTO> getUsers(UserSearchCondition condition){
         return userRepository.findUsersByUsername(condition);
     }
@@ -100,21 +108,21 @@ public class UserService {
     }
 
     private void OriginalFormMultiPartCheck(UserForm form, User user) throws IOException {
-        if(user.getPath() == null){
-            if (form.getProfile() != null){
-                String fileName = fileProcessService.uploadImage(form.getProfile());
-                String path = awsS3Service.getFileUrl(fileName);
-                user.pathSetting(path);
-            }
-        } else {
-            if (form.getProfile() != null){
-                String fileName = awsS3Service.getFileName(user.getPath());
-                fileProcessService.deleteImage(fileName);
-
-                String uploadFileName = fileProcessService.uploadImage(form.getProfile());
-                user.pathSetting(awsS3Service.getFileUrl(uploadFileName));
-            }
-        }
+//        if(user.getPath() == null){
+//            if (form.getProfile() != null){
+//                String fileName = fileProcessService.uploadImage(form.getProfile());
+//                String path = awsS3Service.getFileUrl(fileName);
+//                user.pathSetting(path);
+//            }
+//        } else {
+//            if (form.getProfile() != null){
+//                String fileName = awsS3Service.getFileName(user.getPath());
+//                fileProcessService.deleteImage(fileName);
+//
+//                String uploadFileName = fileProcessService.uploadImage(form.getProfile());
+//                user.pathSetting(awsS3Service.getFileUrl(uploadFileName));
+//            }
+//        }
     }
 
     public User getByCredentials(String email, String password, PasswordEncoder encoder){

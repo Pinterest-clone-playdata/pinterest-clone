@@ -12,6 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
 import static com.team1.pinterest.Exception.ErrorCode.*;
 
 @Service
@@ -24,18 +29,21 @@ public class CommentLikeService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
-    public boolean createCommentLike(Long userId, Long commentId){
+    public int createCommentLike(Long userId, Long commentId){
         User user = findById(userId);
         Comment comment = findByCommentId(commentId);
 
         if (isNotAlreadyCommentLike(user, comment)) {
             commentLikeRepository.save(new CommentLike(user,comment));
-            comment.plusCount();
-            return true;
+            return comment.plusCount();
+        } else {
+            Optional<CommentLike> commentLike = commentLikeRepository.findByUserAndComment(user, comment);
+            CommentLike notOptional = List.of(commentLike.get()).get(0);
+            if (commentLike != null) commentLikeRepository.delete(notOptional);
+            return comment.minusCount();
         }
-
-        throw new CustomException(DUPLICATE_RESOURCE);
     }
+
 
     public boolean deleteCommentLike(Long userId, Long commentLikeId){
         User user = findById(userId);

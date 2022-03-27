@@ -2,6 +2,7 @@ package com.team1.pinterest.Controller;
 
 import com.team1.pinterest.DTO.Basic.ResponseDTO;
 import com.team1.pinterest.DTO.CommentDTO;
+import com.team1.pinterest.DTO.CommentResponseDTO;
 import com.team1.pinterest.Entitiy.Comment;
 import com.team1.pinterest.Service.CommentService;
 import com.team1.pinterest.Service.PinService;
@@ -53,29 +54,28 @@ public class CommentAPI {
     })
 
     //@PostMapping("/pin/{pinId}/comment")
-    @PostMapping("/pin-comment/{pinId}/comment")
+    @PostMapping("/pin-comment/comment")
     public ResponseEntity<?> createComment(@RequestBody @Valid CommentDTO request,
-                                           @PathVariable("pinId") Long pinId,
                                            @AuthenticationPrincipal Long userId) throws IOException{
-        List<CommentDTO> dto = commentService.createComment(userId,pinId, request.getContent());
+        List<CommentResponseDTO> dto = commentService.createComment(userId, request.getPinId(), request.getContent());
         return getResponseEntity(dto);
     }
 
     @GetMapping("/pin-comment/{pinId}/comment")
     public ResponseEntity<?> getCommentAllAtPin(@PathVariable("pinId")Long pinId){
-        List<CommentDTO> dto  = commentService.readByPinId(pinId);
+        List<CommentResponseDTO> dto  = commentService.readByPinId(pinId);
         return getResponseEntity(dto);
     }
     @GetMapping("/pin-comment/comment/{commentId}")
     public ResponseEntity<?> getOneComment(@PathVariable("commentId") Long commentId){
-        List<CommentDTO> dto = commentService.readById(commentId);
+        List<CommentResponseDTO> dto = commentService.readById(commentId);
         return getResponseEntity(dto);
 
     }
     @PatchMapping("/pin-comment/{pinId}/comment/{commentId}")
     public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO,@PathVariable("pinId") Long pinId, @PathVariable("commentId") Long commentId, @AuthenticationPrincipal Long userId){
         Comment comment  = CommentDTO.toEntity(commentDTO);
-        List<CommentDTO> dto = commentService.updateComment(comment,userId,pinId,commentId);
+        List<CommentResponseDTO> dto = commentService.updateComment(comment,userId,pinId,commentId);
         return getResponseEntity(dto);
     }
     @DeleteMapping("/pin-comment/comment/{commentId}")
@@ -92,9 +92,9 @@ public class CommentAPI {
     }
 
     //
-    private ResponseEntity<?> getResponseEntity(List<CommentDTO> dto) {
+    private ResponseEntity<?> getResponseEntity(List<CommentResponseDTO> dto) {
         try{
-            ResponseDTO<CommentDTO> response = ResponseDTO.<CommentDTO>builder().data(dto).status(200).build();
+            ResponseDTO<CommentResponseDTO> response = ResponseDTO.<CommentResponseDTO>builder().data(dto).status(200).build();
             return ResponseEntity.ok().body(response);
         } catch (Exception e){
             ResponseDTO<Object> response = ResponseDTO.builder().status(500).message(e.getMessage()).build();

@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("v1")
@@ -17,16 +19,16 @@ public class CommentLikeAPI {
     @PostMapping("comment-like/{commentId}")
     public ResponseEntity<?> createCommentLike(@PathVariable("commentId") Long commentId, @AuthenticationPrincipal Long userId){
 
-        commentLikeService.createCommentLike(userId,commentId);
-        ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("commentLike add success").build();
+        int count = commentLikeService.createCommentLike(userId,commentId);
+        ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("commentLike add success").data(List.of(count)).build();
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("comment-like/{commentId}")
-    public ResponseEntity<?> deleteCommentLike(@PathVariable("commentId") Long commentId, @AuthenticationPrincipal Long userId){
-
-        commentLikeService.deleteCommentLike(userId,commentId);
-        ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("commentLike remove success").build();
-        return ResponseEntity.ok().body(response);
-    }
+//    @DeleteMapping("comment-like/{commentId}")
+//    public ResponseEntity<?> deleteCommentLike(@PathVariable("commentId") Long commentId, @AuthenticationPrincipal Long userId){
+//
+//        commentLikeService.deleteCommentLike(userId,commentId);
+//        ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("commentLike remove success").build();
+//        return ResponseEntity.ok().body(response);
+//    }
 }

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Slice;
 
 public interface PinRepositoryCustom {
 
-    Slice<PinDTO> findAllPinHome(Pageable pageable, PinSearchCondition pinSearchCondition);
+    Slice<PinDTO> findAllPinHome();
 
     Slice<PinDTO> findFollowersByUser(Pageable pageable, User user);
 

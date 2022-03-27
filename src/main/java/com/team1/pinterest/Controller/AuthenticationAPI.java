@@ -8,6 +8,7 @@ import com.team1.pinterest.Security.TokenProvider;
 import com.team1.pinterest.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,12 +30,12 @@ public class AuthenticationAPI {
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @RequestMapping(
-            path = "/auth/signup",
-            method = RequestMethod.POST,
-            consumes ="multipart/form-data")
-    //@PostMapping("/auth/signup")
-    public ResponseEntity<?> signup(@Valid @ModelAttribute UserForm form) throws IOException {
+//    @RequestMapping(
+//            path = "/auth/signup",
+//            method = RequestMethod.POST,
+//            consumes ="multipart/form-data")
+    @PostMapping("/auth/signup")
+    public ResponseEntity<?> signup(@Valid @RequestBody UserForm form) throws IOException {
         userService.createUser(form);
         ResponseDTO<Object> response = ResponseDTO.builder().message("create User success").status(200).build();
         return ResponseEntity.ok().body(response);
@@ -41,10 +44,15 @@ public class AuthenticationAPI {
     @PostMapping("/auth/signin")
     public ResponseEntity<?> signin(@Valid @RequestBody LoginForm form){
         User user = userService.getByCredentials(form.getEmail(), form.getPassword(), passwordEncoder);
-
         String token = tokenProvider.create(user);
         log.info("token 지급 : " + token );
-        ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("Login Success").build();
+        ResponseDTO<Object> response = ResponseDTO.builder().status(200).message("Login Success: " + token).data(List.of(user.getUsername())).build();
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/auth/signin/{email}")
+    public ResponseEntity<?> checkIfEmailIsUsed(@PathVariable String email) {
+//        if (userService.emailExists(email)) return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

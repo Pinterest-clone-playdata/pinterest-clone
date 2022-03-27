@@ -86,8 +86,8 @@ public class PinService {
     }
 
     @Transactional(readOnly = true)
-    public Slice<PinDTO> getPinsAtHome(Pageable pageable, PinSearchCondition condition){
-        return pinRepository.findAllPinHome(pageable,condition);
+    public Slice<PinDTO> getPinsAtHome(){
+        return pinRepository.findAllPinHome();
     }
 
     @Transactional(readOnly = true)

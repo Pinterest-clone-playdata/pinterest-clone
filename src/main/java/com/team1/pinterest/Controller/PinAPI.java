@@ -82,9 +82,8 @@ public class PinAPI {
     }
 
     @GetMapping("pin/home")
-    public ResponseEntity<?> getAllAtHome(@PageableDefault(size = 15) Pageable pageable,
-                                          PinSearchCondition condition){
-        Slice<PinDTO> pinsAtHome = pinService.getPinsAtHome(pageable, condition);
+    public ResponseEntity<?> getAllAtHome(){
+        Slice<PinDTO> pinsAtHome = pinService.getPinsAtHome();
         return ResponseEntity.ok().body(pinsAtHome);
     }
 
